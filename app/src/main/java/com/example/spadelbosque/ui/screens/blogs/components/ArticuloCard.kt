@@ -1,4 +1,5 @@
-package com.example.spadelbosque.ui.theme
+package com.example.spadelbosque.ui.screens.blogs.components
+
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -13,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.example.spadelbosque.model.BlogArticulo
 
 @Composable
-fun Articulos (article : BlogArticulo){
+fun ArticuloCard (article : BlogArticulo){
     Card(
         modifier = Modifier
             .fillMaxWidth()
