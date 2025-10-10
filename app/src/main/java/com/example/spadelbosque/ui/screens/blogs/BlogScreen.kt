@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.spadelbosque.ui.theme.Articulos
+import com.example.spadelbosque.ui.screens.blogs.components.ArticuloCard
 import com.example.spadelbosque.viewmodel.BlogViewModel
 
 // Pantalla principal del Blog de Bienestar
@@ -49,16 +49,16 @@ fun BlogScreen(viewModel: BlogViewModel = BlogViewModel()) {
         ) {
             // items: Crea un elemento por cada artículo en la lista
             items(articles) { article ->
-                Articulos(article = article)
+                ArticuloCard(article = article)
             }
         }
     }
 }
 
-@Preview(showBackground = true)
+/*@Preview(showBackground = true)
 @Composable
 fun BlogScreenPreview() {
-    SPADelBosqueTheme {
+    SpaTheme  {
         BlogScreen()
     }
-}
+}*/
