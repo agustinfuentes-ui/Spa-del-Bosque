@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.example.spadelbosque.navigation.AppNavHost
-import com.example.spadelbosque.ui.components.MainShell
 import com.example.spadelbosque.ui.theme.SpaTheme
 
 class MainActivity : ComponentActivity() {

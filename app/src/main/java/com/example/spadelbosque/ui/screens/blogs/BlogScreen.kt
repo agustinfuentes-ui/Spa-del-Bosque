@@ -1,4 +1,4 @@
-package com.example.spadelbosque.ui.theme
+package com.example.spadelbosque.ui.screens.blogs
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -9,6 +9,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.spadelbosque.ui.screens.blogs.components.ArticuloCard
 import com.example.spadelbosque.viewmodel.BlogViewModel
+import com.example.spadelbosque.ui.theme.SpaTheme
+
 
 // Pantalla principal del Blog de Bienestar
 @OptIn(ExperimentalMaterial3Api::class)
@@ -55,10 +57,10 @@ fun BlogScreen(viewModel: BlogViewModel = BlogViewModel()) {
     }
 }
 
-/*@Preview(showBackground = true)
+@Preview(showBackground = true)
 @Composable
 fun BlogScreenPreview() {
     SpaTheme  {
         BlogScreen()
     }
-}*/
+}
