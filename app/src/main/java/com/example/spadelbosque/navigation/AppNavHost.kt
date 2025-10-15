@@ -41,7 +41,7 @@ fun AppNavHost() {
         // composable(Route.Login.path)     { LoginScreen() }
         // composable(Route.Registro.path)  { RegistroScreen() }
 
-        // Detalle (si aún no existe, comenta todo este bloque)
+        // Detalle
         /*
         composable(
             route = Route.ServicioDetalle.path,
