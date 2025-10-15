@@ -1,8 +1,10 @@
 package com.example.spadelbosque.model
 
-//momentaneo para que no este vacio
 data class Servicio(
-    val sku: Int = 0,
-    val nombre: String = "",
-    val duracion: String = ""
+    val sku: String,
+    val categoria: String,
+    val nombre: String,
+    val precio: Int,
+    val img: String,
+    val duracionMin: Int
 )
