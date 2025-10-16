@@ -4,7 +4,6 @@ sealed class Route(val path: String){
     data object Home : Route("home")
     data object Servicios : Route("servicios")
     data object Blogs : Route("blogs")
-
     data object Nosotros : Route("nosotros")
     data object Contacto: Route("contacto")
     data object Carrito: Route("carrito")
