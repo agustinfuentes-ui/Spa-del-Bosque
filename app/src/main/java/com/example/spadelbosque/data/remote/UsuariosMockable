@@ -1,0 +1,104 @@
+{
+  "usuarios": [
+    {
+      "id": "U001",
+      "nombres": "Usuario",
+      "apellidos": "Prueba Fácil",
+      "correo": "prueba@duoc.cl",
+      "passwordHash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "telefono": "912345678",
+      "region": "Valparaíso",
+      "comuna": "Viña del Mar"
+    },
+    {
+      "id": "U002",
+      "nombres": "Pamela",
+      "apellidos": "Alvarez",
+      "correo": "pamela.alvarez@gmail.com",
+      "passwordHash": "6cf615d5d325b17efb8c938a3a5c223a0f7a9d8d42100a7601d9d9f39b25a9e3",
+      "telefono": "922334455",
+      "region": "Valparaíso",
+      "comuna": "Quilpué"
+    },
+    {
+      "id": "U003",
+      "nombres": "Javier",
+      "apellidos": "Peña",
+      "correo": "jav.penar@profesor.duoc.cl",
+      "passwordHash": "b2e98ad6f6eb8508dd6a14cfa704bad7f05f6fb1e3db7f8e4d5e6aab1f6a8f52",
+      "telefono": "932221199",
+      "region": "Metropolitana de Santiago",
+      "comuna": "Santiago"
+    },
+    {
+      "id": "U004",
+      "nombres": "Carolina",
+      "apellidos": "González",
+      "correo": "caro.gonzalez@gmail.com",
+      "passwordHash": "e04d8cfd8b918a7761b65a40b12c58b7af59a9e3f865fa8e5c283f5c98ed2b14",
+      "telefono": "945678321",
+      "region": "Valparaíso",
+      "comuna": "Concón"
+    },
+    {
+      "id": "U005",
+      "nombres": "Matías",
+      "apellidos": "Fuentes",
+      "correo": "matias.fuentes@duoc.cl",
+      "passwordHash": "be26d63d5e9bca5e203e6e1d9b4a928a8495f8b2a27e4e3fddae7d47a45d3c2c",
+      "telefono": "956789012",
+      "region": "Metropolitana de Santiago",
+      "comuna": "Providencia"
+    },
+    {
+      "id": "U006",
+      "nombres": "Camila",
+      "apellidos": "Rojas",
+      "correo": "camila.rojas@duoc.cl",
+      "passwordHash": "c8aab1c30c2b3d278e9c1f6e9c8f5d22bfc12efdf96e8b63a67af1ce3ad8b7a1",
+      "telefono": "934567890",
+      "region": "Biobío",
+      "comuna": "Concepción"
+    },
+    {
+      "id": "U007",
+      "nombres": "Diego",
+      "apellidos": "Muñoz",
+      "correo": "diegomunoz@gmail.com",
+      "passwordHash": "2c624232cdd221771294dfbb310aca000a0df6ac8b66b696d90ef06fdefb64a3",
+      "telefono": "947001122",
+      "region": "Biobío",
+      "comuna": "Talcahuano"
+    },
+    {
+      "id": "U008",
+      "nombres": "Antonia",
+      "apellidos": "Pérez",
+      "correo": "antonia.perez@profesor.duoc.cl",
+      "passwordHash": "b7b80e17cf7c3a7e13a6a8f1b2a8a57a3e09a735b5dfc6b38d17d3d593c9b211",
+      "telefono": "938776655",
+      "region": "Coquimbo",
+      "comuna": "La Serena"
+    },
+    {
+      "id": "U009",
+      "nombres": "Felipe",
+      "apellidos": "Torres",
+      "correo": "felipe.torres@gmail.com",
+      "passwordHash": "8a7d8a2b6bfa1c42f4a6939b6370e5f4a4c86f82e5b9c7b33a5a52f8a9d6e2b1",
+      "telefono": "935553333",
+      "region": "Coquimbo",
+      "comuna": "Coquimbo"
+    },
+    {
+      "id": "U010",
+      "nombres": "Valentina",
+      "apellidos": "Contreras",
+      "correo": "valentina.contreras@duoc.cl",
+      "passwordHash": "b6cbe4b3c2e32b9c22af4c5d3e6e5b1f3a4a9a7a5e1b2f3c4d5a6e7f8b9c0d1e",
+      "telefono": "944112233",
+      "region": "Valparaíso",
+      "comuna": "Valparaíso"
+    }
+  ]
+}

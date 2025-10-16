@@ -17,3 +17,6 @@ val GrisClaro = Color(0xFFB6B6B6)
 val VerdeFondo = Color(0xFFF0F6F4)
 val TextoPrimario = Color(0xFF222222)
 val TextoSecundario = Color(0xFF555555)
+val TextoChipBtn = Color.White
+val TextoChipBtnSecondary = Color(0xFF0CA695)
+val FondoChipBtn = Color(0xFF0CA695)
