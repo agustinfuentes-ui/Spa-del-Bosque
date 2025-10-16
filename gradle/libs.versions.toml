@@ -10,6 +10,8 @@ activityCompose = "1.8.0"
 lifecycle = "2.9.4"
 navigation = "2.8.3"
 roomKtx = "2.8.2"
+datastore = "1.1.7"
+ksp = "2.0.21-1.0.20"
 
 
 [libraries]
@@ -32,6 +34,8 @@ androidx-lifecycle-runtime-compose  = { module = "androidx.lifecycle:lifecycle-r
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
 androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomKtx" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 
 
 
@@ -39,4 +43,5 @@ androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = 
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
