@@ -22,7 +22,7 @@ import com.example.spadelbosque.ui.theme.SpaTheme
 fun HomeScreen() {
     Scaffold(
         topBar = {
-            TopAppBar(title = {Text("Pagina HOME")})
+            TopAppBar(title = {Text("Pagina HOME", color = MaterialTheme.colorScheme.onBackground)})
         }
     ) { innerPadding ->
         Column(
@@ -32,7 +32,7 @@ fun HomeScreen() {
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
-            Text(text = "Bienvenido a la pagina HOME")
+            Text(text = "Bienvenido a la pagina HOME", color = MaterialTheme.colorScheme.onBackground)
             Button(onClick = {/* accion futura*/ }) {
                 Text("Presióname",
                     color = MaterialTheme.colorScheme.onPrimary)

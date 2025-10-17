@@ -1,5 +1,4 @@
 package com.example.spadelbosque.viewmodel
 
-
-class HomeViewModel {
+class NosotrosViewModel {
 }

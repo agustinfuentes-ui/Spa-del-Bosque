@@ -19,6 +19,7 @@ import com.example.spadelbosque.ui.screens.registro.RegistroScreen
 import com.example.spadelbosque.ui.screens.servicios.ServicioDetalleScreen
 import com.example.spadelbosque.ui.screens.servicios.ServiciosScreen
 import com.example.spadelbosque.viewmodel.AuthViewModel
+import com.example.spadelbosque.viewmodel.ContactoViewModel
 
 @Composable
 fun AppNavHost() {
@@ -51,7 +52,8 @@ fun AppNavHost() {
             MainShell(navController) { NosotrosScreen() }
         }
         composable(Route.Contacto.path) {
-            MainShell(navController) { ContactoScreen() }
+            val contactoViewModel: ContactoViewModel = viewModel()
+            MainShell(navController) { ContactoScreen(navController, contactoViewModel) }
         }
         composable(Route.Carrito.path) {
             MainShell(navController) { CarritoScreen() }
