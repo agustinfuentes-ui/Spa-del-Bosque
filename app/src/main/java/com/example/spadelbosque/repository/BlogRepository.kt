@@ -14,7 +14,7 @@ object BlogRepository {
                 author = "Equipo SPA",
                 date = "05/09/2025",
                 excerpt = "Aprende una técnica breve para calmar el sistema nervioso antes de dormir o después del trabajo...",
-                imageRes = R.drawable.logo // EL logo de momento
+                imageRes = R.drawable.ayurvedico // EL logo de momento
             ),
             BlogArticulo(
                 id = 2,
@@ -22,7 +22,7 @@ object BlogRepository {
                 author = "Viviana",
                 date = "01/09/2025",
                 excerpt = "La termoterapia mejora la circulación y libera tensiones profundas. Te contamos cómo se realiza…",
-                imageRes = R.drawable.logo
+                imageRes = R.drawable.piedras_calientes
             ),
             BlogArticulo(
                 id = 3,
@@ -30,7 +30,7 @@ object BlogRepository {
                 author = "Rosa",
                 date = "28/08/2025",
                 excerpt = "Qué llevar, cómo prepararte y qué esperar de las distintas temperaturas del circuito…",
-                imageRes = R.drawable.logo
+                imageRes = R.drawable.circuito
             )
         )
     }

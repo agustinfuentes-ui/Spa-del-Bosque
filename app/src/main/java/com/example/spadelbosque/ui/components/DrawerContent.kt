@@ -4,9 +4,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Newspaper
 import androidx.compose.material.icons.filled.Phone
-import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Spa
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -24,6 +23,7 @@ fun DrawerContent(
     val items = listOf(
         Triple("Home", Icons.Filled.Home, Route.Home.path),
         Triple("Servicios", Icons.Filled.Spa, Route.Servicios.path),
+        Triple("Blogs", Icons.Filled.Newspaper, Route.Blogs.path),
         Triple("Nosotros", Icons.Filled.Info, Route.Nosotros.path),
         Triple("Contacto", Icons.Filled.Phone, Route.Contacto.path),
 

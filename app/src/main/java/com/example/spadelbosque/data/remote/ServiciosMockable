@@ -1,0 +1,27 @@
+{
+  "servicios": [
+    { "sku": "RELAX30", "categoria": "masajes", "nombre": "Masaje de Relajación 30 min", "precio": 35000, "img": "/Productos/relajacion.png", "duracionMin": 30 },
+    { "sku": "RELAX40", "categoria": "masajes", "nombre": "Masaje de Relajación 40 min", "precio": 40000, "img": "/Productos/relajacion.png", "duracionMin": 40 },
+    { "sku": "RELAX60", "categoria": "masajes", "nombre": "Masaje de Relajación 60 min", "precio": 45000, "img": "/Productos/relajacion.png", "duracionMin": 60 },
+    { "sku": "DESC60",  "categoria": "masajes", "nombre": "Masaje Descontracturante 60 min", "precio": 55000, "img": "/Productos/descontracturante.png", "duracionMin": 60 },
+    { "sku": "PIED60",  "categoria": "masajes", "nombre": "Masaje Piedras Calientes 60 min", "precio": 57000, "img": "/Productos/piedras-calientes.png", "duracionMin": 60 },
+    { "sku": "BOSQUE60","categoria": "masajes", "nombre": "Masaje del Bosque 60 min", "precio": 47000, "img": "/Productos/bosque.png", "duracionMin": 60 },
+
+    { "sku": "OLIVO90", "categoria": "corporales", "nombre": "Olivoterapia 90 min", "precio": 72000, "img": "/Productos/olivoterapia.png", "duracionMin": 90 },
+    { "sku": "CHOCO90", "categoria": "corporales", "nombre": "Chocolaterapia 90 min", "precio": 87000, "img": "/Productos/chocolaterapia.png", "duracionMin": 90 },
+    { "sku": "EXFO30",  "categoria": "corporales", "nombre": "Exfoliación corporal 30 min", "precio": 42000, "img": "/Productos/exfoliacion.png", "duracionMin": 30 },
+
+    { "sku": "CIRC45",  "categoria": "circuitos",  "nombre": "Circuito de agua 45 min", "precio": 20000, "img": "/Productos/circuito.png", "duracionMin": 45 },
+    { "sku": "SAUNA30", "categoria": "circuitos",  "nombre": "Sauna seco 30 min", "precio": 18000, "img": "/Productos/sauna.png", "duracionMin": 30 },
+
+    { "sku": "RENO135", "categoria": "individuales", "nombre": "Renovación 135 min", "precio": 87000, "img": "/Productos/renovacion.png", "duracionMin": 135 },
+    { "sku": "DULCE135","categoria": "individuales", "nombre": "Dulce aventura en el Bosque 135 min", "precio": 102000, "img": "/Productos/dulceaventura.png", "duracionMin": 135 },
+    { "sku": "DAY135",  "categoria": "individuales", "nombre": "Day Use 135 min", "precio": 107000, "img": "/Productos/dayuse.png", "duracionMin": 135 },
+
+    { "sku": "NAT115",  "categoria": "parejas", "nombre": "Programa Bosque Nativo 115 min", "precio": 134000, "img": "/Productos/bosqueNativo.png", "duracionMin": 115 },
+    { "sku": "MAG135",  "categoria": "parejas", "nombre": "Programa Bosque Mágico 135 min", "precio": 186000, "img": "/Productos/bosqueMagico.png", "duracionMin": 135 },
+
+    { "sku": "AMIG115", "categoria": "escapada-amigas", "nombre": "Programa Escapada de amigas 115 min", "precio": 276000, "img": "/Productos/EscapadaAmigas.png", "duracionMin": 115 }
+  ]
+}
+
