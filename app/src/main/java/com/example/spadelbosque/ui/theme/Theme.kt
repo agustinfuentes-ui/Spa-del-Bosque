@@ -39,7 +39,7 @@ private val LightColors = lightColorScheme(
 
 private val DarkColors = darkColorScheme(
     primary = VerdeHoja,
-    onPrimary = Color.Black.copy(alpha = .1f), // alto contraste no puro blanco en dark
+    onPrimary = Color.White.copy(alpha = .1f), // alto contraste no puro blanco en dark
     primaryContainer = Color(0xFF0A5F56),
     onPrimaryContainer = Color.White,
     secondary = Color(0xFF3E6B66),
