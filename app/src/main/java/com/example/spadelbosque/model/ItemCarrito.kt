@@ -1,8 +1,9 @@
 package com.example.spadelbosque.model
 
-//momentaneo para que no este vacio
+
 data class ItemCarrito(
-    val id: Int = 0,
-    val nombre: String = "",
-    val correo: String = ""
+    val sku: String,
+    val nombre: String,
+    val precio: Int,
+    val qty: Int = 1
 )
