@@ -1,5 +1,6 @@
 package com.example.spadelbosque.ui.screens.home
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
@@ -12,12 +13,41 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
 import com.example.spadelbosque.ui.components.Carrusel
-import androidx.compose.ui.Alignment
+import com.example.spadelbosque.ui.theme.SpaTheme
 import androidx.navigation.NavController
+import androidx.compose.runtime.LaunchedEffect
+import com.example.spadelbosque.viewmodel.CarritoViewModel
+import com.example.spadelbosque.viewmodel.factory.CarritoVmFactory
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.spadelbosque.di.AppGraph
+import androidx.compose.runtime.*
+import androidx.navigation.compose.rememberNavController
 import com.example.spadelbosque.navigation.Route
+
+
+@SuppressLint("UnrememberedGetBackStackEntry")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen(
+    navController: NavController,
+    carritoVm: CarritoViewModel = viewModel(factory = CarritoVmFactory(AppGraph.cartRepo))
+) {
+    val clearFlow = remember(navController) {
+        navController.getBackStackEntry(Route.Home.path)
+            .savedStateHandle
+            .getStateFlow("clear_cart", false)
+    }
+    val shouldClear by clearFlow.collectAsState()
+
+    LaunchedEffect(shouldClear) {
+        if (shouldClear) {
+            carritoVm.clear()
+            // apaga el flag para no repetir
+            navController.getBackStackEntry(Route.Home.path)
+                .savedStateHandle["clear_cart"] = false
+        }
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(title = {
@@ -67,4 +97,11 @@ fun HomeScreen(navController: NavController) {
     }
 }
 
-
+@Preview(showBackground = true)
+@Composable
+fun HomeScreenPreview() {
+    SpaTheme {
+        // Se añade un NavController de prueba para la previsualización
+        HomeScreen(navController = rememberNavController())
+    }
+}
