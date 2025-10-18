@@ -19,8 +19,8 @@ private val LightColors = lightColorScheme(
     onSecondaryContainer = Color.White,
 
     // Superficies y fondos
-    background = VerdeFondo,          // fondo sutil como en la web
-    onBackground = TextoPrimario,
+    background = Color.White,          // fondo sutil como en la web
+    onBackground = Color.Black,
     surface = Color.White,
     onSurface = TextoPrimario,
     surfaceVariant = GrisClaro.copy(alpha = .25f),
@@ -38,20 +38,34 @@ private val LightColors = lightColorScheme(
 )
 
 private val DarkColors = darkColorScheme(
+    //Marca
     primary = VerdeHoja,
-    onPrimary = Color.White.copy(alpha = .1f), // alto contraste no puro blanco en dark
-    primaryContainer = Color(0xFF0A5F56),
+    onPrimary = Color.White, // alto contraste no puro blanco en dark
+    primaryContainer = VerdeAgua, //Color(0xFF0A5F56),
     onPrimaryContainer = Color.White,
-    secondary = Color(0xFF3E6B66),
+
+    // Secundario
+    secondary = VerdeAgua,
     onSecondary = Color.White,
+    secondaryContainer = VerdeAgua.copy(alpha = .85f),
+    onSecondaryContainer = Color.White,
+
+    // Superficies y fondos
     background = Color(0xFF121212),
     onBackground = Color.White,
     surface = Color(0xFF1E1E1E),
     onSurface = Color.White,
-    surfaceVariant = Color(0xFF2A2A2A),
+    surfaceVariant = Color.White,//Color(0xFF2A2A2A),
     onSurfaceVariant = Color(0xFFDDDDDD),
-    outline = Color(0xFF3A3A3A),
-    error = Color(0xFFCF6679),
+
+    //Chip y textos
+    outlineVariant = Color.White,//Color(0xFF3A3A3A),
+
+    //Bordes/outline
+    outline = Color.White/*Color(0xFF3A3A3A)*/,
+
+    // Estados
+    error = Color(0xFFB3261E),
     onError = Color.Black
 )
 

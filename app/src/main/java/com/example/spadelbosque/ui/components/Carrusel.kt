@@ -27,11 +27,11 @@ fun Carrusel() {
 
     val carouselItems = remember {
         listOf(
-            CarouselItem(0, R.drawable.logo, "cupcake"),
-            CarouselItem(1, R.drawable.logo, "donut"),
-            CarouselItem(2, R.drawable.logo, "eclair"),
-            CarouselItem(3, R.drawable.logo, "froyo"),
-            CarouselItem(4, R.drawable.logo, "gingerbread")
+            CarouselItem(0, R.drawable.sauna, "cupcake"),
+            CarouselItem(1, R.drawable.chocolaterapia, "donut"),
+            CarouselItem(2, R.drawable.piedras_calientes, "eclair"),
+            CarouselItem(3, R.drawable.circuito, "froyo"),
+            CarouselItem(4, R.drawable.escapada_amigas, "gingerbread")
         )
     }
 

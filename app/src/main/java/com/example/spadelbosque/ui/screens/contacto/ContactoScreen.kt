@@ -16,64 +16,83 @@ import com.example.spadelbosque.ui.theme.SpaTheme
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.spadelbosque.viewmodel.ContactoViewModel
+import kotlinx.coroutines.launch
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 
 @Composable
 fun ContactoScreen(navController: NavController, viewModel: ContactoViewModel) {
     val estado by viewModel.estado.collectAsState()
-    Column(
-        Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        OutlinedTextField(
-            value = estado.nombre,
-            onValueChange = viewModel::onNombreChange,
-            label = { Text("Nombre") },
-            isError = estado.errores.nombre != null,
-            supportingText = {
-                estado.errores.nombre?.let { Text(it, color = MaterialTheme.colorScheme.error) }
-            },
-            modifier = Modifier.fillMaxWidth()
-        )
-        OutlinedTextField(
-            value = estado.correo,
-            onValueChange = viewModel::onCorreoChange,
-            label = { Text("Correo") },
-            isError = estado.errores.correo != null,
-            supportingText = {
-                estado.errores.correo?.let { Text(it, color = MaterialTheme.colorScheme.error) }
-            },
-            modifier = Modifier.fillMaxWidth()
-        )
-        // --- CAMPO PARA EL ASUNTO ---
-        OutlinedTextField(
-            value = estado.asunto,
-            onValueChange = viewModel::onAsuntoChange,
-            label = { Text("Asunto") },
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth()
-        )
+    val scope = rememberCoroutineScope()
+    val snackBarHostState = remember { SnackbarHostState() }
 
-        OutlinedTextField(
-            value = estado.mensaje,
-            onValueChange = viewModel::onMensajeChange,
-            label = { Text("Mensaje") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(150.dp),
-            supportingText = {
-                Text(
-                    text = "${estado.mensaje.length} / 500",
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.End
-                )
+    Scaffold(
+        snackbarHost = { SnackbarHost(snackBarHostState) },
+    ) { innerPadding ->
+        Column(
+            Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            OutlinedTextField(
+                value = estado.nombre,
+                onValueChange = viewModel::onNombreChange,
+                label = { Text("Nombre") },
+                isError = estado.errores.nombre != null,
+                supportingText = {
+                    estado.errores.nombre?.let { Text(it, color = MaterialTheme.colorScheme.error) }
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
+            OutlinedTextField(
+                value = estado.correo,
+                onValueChange = viewModel::onCorreoChange,
+                label = { Text("Correo") },
+                isError = estado.errores.correo != null,
+                supportingText = {
+                    estado.errores.correo?.let { Text(it, color = MaterialTheme.colorScheme.error) }
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
+            // --- CAMPO PARA EL ASUNTO ---
+            OutlinedTextField(
+                value = estado.asunto,
+                onValueChange = viewModel::onAsuntoChange,
+                label = { Text("Asunto") },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            OutlinedTextField(
+                value = estado.mensaje,
+                onValueChange = viewModel::onMensajeChange,
+                label = { Text("Mensaje") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(150.dp),
+                supportingText = {
+                    Text(
+                        text = "${estado.mensaje.length} / 500",
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.End
+                    )
+                }
+            )
+
+
+            Button(onClick = {
+                val esValido = viewModel.validaFormulario()
+                if (esValido) {
+                    scope.launch {
+                        snackBarHostState.showSnackbar("Mensaje enviado correctamente")
+                        viewModel.limpiarFormulario()
+                    }
+                }
+            }, modifier = Modifier.fillMaxWidth()) {
+                Text("Enviar Mensaje")
             }
-        )
-
-        // Aquí podrías agregar un botón de envío
-        // Button(onClick = { /* Lógica de envío */ }, modifier = Modifier.fillMaxWidth()) {
-        //     Text("Enviar Mensaje")
-        // }
+        }
     }
 }

@@ -46,7 +46,7 @@ fun AppNavHost() {
 
         // --- Flujo Principal (con MainShell) ---
         composable(Route.Home.path) {
-            MainShell(navController) { HomeScreen(navController = navController) } // Parámetro añadido
+            MainShell(navController) { HomeScreen(navController = navController) }
         }
 
         composable(Route.Servicios.path) {
