@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import com.example.spadelbosque.ui.components.Carrusel
 import com.example.spadelbosque.ui.theme.SpaTheme
 import androidx.navigation.NavController
@@ -21,6 +22,8 @@ import com.example.spadelbosque.viewmodel.factory.CarritoVmFactory
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.spadelbosque.di.AppGraph
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.example.spadelbosque.navigation.Route
 
@@ -50,11 +53,13 @@ fun HomeScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(title = {
-                Text(
-                    "Relajo y desconexión",
+            TopAppBar(
+                title = { Text("Relajo y desconexión",color = MaterialTheme.colorScheme.onPrimary) },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
                 )
-            })
+            )
         }
     ) { innerPadding ->
         LazyColumn (
@@ -69,6 +74,8 @@ fun HomeScreen(
                 Text(
                     text = "Descubra los espacios ideales para el descanso y la calma en Spa del Bosque. Contamos con el único circuito de aguas de la V Región, acondicionadas naturalmente a tres temperaturas. Un mágico lugar donde el silencio, la paz, las vertientes y la naturaleza son protagonistas.\n" +
                             "Explore nuestros servicios, masajes, tratamientos corporales y terapias de relajación que estimularán la concentración, salud y bienestar integralmente.",
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
             item {

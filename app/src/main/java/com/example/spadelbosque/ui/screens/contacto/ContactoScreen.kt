@@ -39,7 +39,8 @@ fun ContactoScreen(navController: NavController, viewModel: ContactoViewModel) {
             OutlinedTextField(
                 value = estado.nombre,
                 onValueChange = viewModel::onNombreChange,
-                label = { Text("Nombre") },
+                label = { Text("Nombre",
+                    color = MaterialTheme.colorScheme.primary) },
                 isError = estado.errores.nombre != null,
                 supportingText = {
                     estado.errores.nombre?.let { Text(it, color = MaterialTheme.colorScheme.error) }
@@ -49,7 +50,8 @@ fun ContactoScreen(navController: NavController, viewModel: ContactoViewModel) {
             OutlinedTextField(
                 value = estado.correo,
                 onValueChange = viewModel::onCorreoChange,
-                label = { Text("Correo") },
+                label = { Text("Correo",
+                    color = MaterialTheme.colorScheme.primary) },
                 isError = estado.errores.correo != null,
                 supportingText = {
                     estado.errores.correo?.let { Text(it, color = MaterialTheme.colorScheme.error) }
@@ -60,7 +62,8 @@ fun ContactoScreen(navController: NavController, viewModel: ContactoViewModel) {
             OutlinedTextField(
                 value = estado.asunto,
                 onValueChange = viewModel::onAsuntoChange,
-                label = { Text("Asunto") },
+                label = { Text("Asunto",
+                    color = MaterialTheme.colorScheme.primary) },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -68,7 +71,8 @@ fun ContactoScreen(navController: NavController, viewModel: ContactoViewModel) {
             OutlinedTextField(
                 value = estado.mensaje,
                 onValueChange = viewModel::onMensajeChange,
-                label = { Text("Mensaje") },
+                label = { Text("Mensaje",
+                    color = MaterialTheme.colorScheme.primary) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(150.dp),

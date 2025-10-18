@@ -37,7 +37,7 @@ fun DrawerContent(
         items.forEach { (label, icon, route) ->
             NavigationDrawerItem(
                 icon = {Icon(icon, contentDescription = label)},
-                label = {Text(label)},
+                label = {Text(label,color = MaterialTheme.colorScheme.onSurface)},
                 selected = currentRoute == route,
                 onClick = {
                     navController.navigate(route){
