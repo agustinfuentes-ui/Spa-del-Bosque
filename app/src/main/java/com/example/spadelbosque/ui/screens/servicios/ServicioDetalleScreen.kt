@@ -36,7 +36,8 @@ import com.example.spadelbosque.viewmodel.ServicioDetalleViewModel
 fun ServicioDetalleScreen(
     navController: NavController,
     servicioSku: String,
-    detalleViewModel: ServicioDetalleViewModel = viewModel()
+    detalleViewModel: ServicioDetalleViewModel = viewModel(),
+    onAgregar: (sku: String, nombre: String, precio: Int) -> Unit = { _,_,_ -> }
 ) {
     LaunchedEffect(key1 = servicioSku) {
         detalleViewModel.cargarDetalleServicio(servicioSku)
@@ -49,7 +50,12 @@ fun ServicioDetalleScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Detalle del Servicio",color = MaterialTheme.colorScheme.onPrimary) },
+                title = {
+                    Text(
+                        "Detalle del Servicio",
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
@@ -75,89 +81,116 @@ fun ServicioDetalleScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            if (uiState.error != null) {
-                Text(
-                    text = uiState.error!!,
-                    color = MaterialTheme.colorScheme.error,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(16.dp)
-                )
-            } else if (servicio == null) {
-                CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
-            } else {
-                val imageResId = context.resources.getIdentifier(servicio.img, "drawable", context.packageName)
+            when {
+                uiState.error != null -> {
+                    Text(
+                        text = uiState.error!!,
+                        color = MaterialTheme.colorScheme.error,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(16.dp)
+                    )
+                }
 
-                Image(
-                    painter = painterResource(id = if (imageResId != 0) imageResId else R.drawable.logo),
-                    contentDescription = "Imagen de ${servicio.nombre}",
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(250.dp),
-                    contentScale = ContentScale.Crop
-                )
+                servicio == null -> {
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
+                }
 
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        CategoriaChip(servicio.categoria.replaceFirstChar { it.uppercase() })
+                else -> {
+
+                    val imageResId = context.resources.getIdentifier(
+                        servicio.img,
+                        "drawable",
+                        context.packageName
+                    )
+
+                    Image(
+                        painter = painterResource(id = if (imageResId != 0) imageResId else R.drawable.logo),
+                        contentDescription = "Imagen de ${servicio.nombre}",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(250.dp),
+                        contentScale = ContentScale.Crop
+                    )
+
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            CategoriaChip(servicio.categoria.replaceFirstChar { it.uppercase() })
+
+                            Text(
+                                text = CLP.format(servicio.precio),
+                                style = MaterialTheme.typography.headlineMedium,
+                                fontWeight = FontWeight.W500,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(16.dp))
 
                         Text(
-                            text = CLP.format(servicio.precio),
-                            style = MaterialTheme.typography.headlineMedium,
-                            fontWeight = FontWeight.W500,
-                            color = MaterialTheme.colorScheme.onSurface
+                            text = "Disfruta de una experiencia de relajación profunda con nuestro masaje exclusivo. Diseñado para aliviar el estrés y la tensión acumulada, este tratamiento te dejará renovado y revitalizado.",
+                            style = MaterialTheme.typography.bodyLarge
                         )
-                    }
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(24.dp))
 
-                    Text(
-                        text = "Disfruta de una experiencia de relajación profunda con nuestro masaje exclusivo. Diseñado para aliviar el estrés y la tensión acumulada, este tratamiento te dejará renovado y revitalizado.",
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-
-                    Spacer(modifier = Modifier.height(24.dp))
-
-                    // Botón de acción principal
-                    Button(
-                        onClick = {
-                            Toast.makeText(context, "${servicio.nombre} se agregó al carrito", Toast.LENGTH_SHORT).show()
-                        },
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Icon(Icons.Default.AddShoppingCart, contentDescription = null)
-                        Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
-                        Text("Agregar",
-                            color = MaterialTheme.colorScheme.onPrimary)
-                    }
-
-                    Spacer(modifier = Modifier.height(32.dp))
-
-                    Text(
-                        text = "También te puede interesar",
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.W600
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    LazyRow(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentPadding = PaddingValues(horizontal = 10.dp)
-                    ) {
-                        items(uiState.serviciosSugeridos) { sugerencia ->
-                            ServicioCard(
-                                servicio = sugerencia,
-                                onVerDetalleClick = { sku ->
-                                    navController.navigate("servicio_detalle/${sku}")
-                                },
-                                onAgregarClick = {
-                                    Toast.makeText(context, "${it.nombre} se agregó al carrito", Toast.LENGTH_SHORT).show()
-                                }
+                        // Botón agregar
+                        Button(
+                            onClick = {
+                                onAgregar(servicio.sku, servicio.nombre, servicio.precio)
+                                Toast.makeText(
+                                    context,
+                                    "${servicio.nombre} se agregó al carrito",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Icon(Icons.Default.AddShoppingCart, contentDescription = null)
+                            Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
+                            Text(
+                                "Agregar",
+                                color = MaterialTheme.colorScheme.onPrimary
                             )
+                        }
+
+                        Spacer(modifier = Modifier.height(32.dp))
+
+                        Text(
+                            text = "También te puede interesar",
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.W600
+                        )
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        LazyRow(
+                            modifier = Modifier.fillMaxWidth(),
+                            contentPadding = PaddingValues(horizontal = 10.dp)
+                        ) {
+                            items(uiState.serviciosSugeridos) { sugerencia ->
+                                ServicioCard(
+                                    servicio = sugerencia,
+                                    onVerDetalleClick = { sku ->
+                                        navController.navigate("servicio_detalle/${sku}")
+                                    },
+                                    onAgregarClick = { serv ->
+                                        onAgregar(
+                                            serv.sku,
+                                            serv.nombre,
+                                            serv.precio
+                                        )   // ← usa el callback
+                                        Toast.makeText(
+                                            context,
+                                            "${serv.nombre} se agregó al carrito",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                )
+                            }
                         }
                     }
                 }

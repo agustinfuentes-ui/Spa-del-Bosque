@@ -22,7 +22,8 @@ import com.example.spadelbosque.ui.components.CategoriaChip
 @Composable
 fun ServiciosScreen(
     navController: NavController,
-    serviciosViewModel: ServiciosViewModel = viewModel()
+    serviciosViewModel: ServiciosViewModel = viewModel(),
+    onAgregar: (sku: String, nombre: String, precio: Int) -> Unit = { _,_,_ -> }
 ) {
     val uiState by serviciosViewModel.uiState.collectAsState()
     val context = LocalContext.current
@@ -43,7 +44,7 @@ fun ServiciosScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(25.dp))
 
             LazyRow(
                 modifier = Modifier.fillMaxWidth(),
@@ -61,7 +62,7 @@ fun ServiciosScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(25.dp))
 
             LazyRow(
                 modifier = Modifier.fillMaxWidth()
@@ -72,8 +73,9 @@ fun ServiciosScreen(
                         onVerDetalleClick = {
                             navController.navigate("servicio_detalle/${servicio.sku}")
                         },
-                        onAgregarClick = {
-                            Toast.makeText(context, "${it.nombre} se agregó al carrito", Toast.LENGTH_SHORT).show()
+                        onAgregarClick = { serv ->
+                            onAgregar(serv.sku, serv.nombre, serv.precio)
+                            Toast.makeText(context, "${serv.nombre} se agregó al carrito", Toast.LENGTH_SHORT).show()
                         }
                     )
                 }
