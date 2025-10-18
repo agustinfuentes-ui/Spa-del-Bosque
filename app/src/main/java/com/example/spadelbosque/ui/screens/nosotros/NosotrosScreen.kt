@@ -63,7 +63,8 @@ private fun InfoSection(title: String, content: @Composable ColumnScope.() -> Un
             text = title,
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(bottom = 12.dp)
+            modifier = Modifier.padding(bottom = 12.dp),
+             color = MaterialTheme.colorScheme.primary
         )
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -83,7 +84,8 @@ private fun InfoRow(icon: ImageVector, text: String) {
             contentDescription = null, // El texto ya describe el contenido
             tint = MaterialTheme.colorScheme.primary
         )
-        Text(text = text, style = MaterialTheme.typography.bodyLarge)
+        Text(text = text, style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
 
