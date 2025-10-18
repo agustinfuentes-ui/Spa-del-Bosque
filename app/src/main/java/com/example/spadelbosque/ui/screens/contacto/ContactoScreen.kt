@@ -71,9 +71,9 @@ fun ContactoScreen(navController: NavController, viewModel: ContactoViewModel) {
             }
         )
 
-        // Aquí podrías agregar un botón de envío
-        // Button(onClick = { /* Lógica de envío */ }, modifier = Modifier.fillMaxWidth()) {
-        //     Text("Enviar Mensaje")
-        // }
+
+        Button(onClick = { /* Lógica de envío */ }, modifier = Modifier.fillMaxWidth()) {
+            Text("Enviar Mensaje")
+        }
     }
 }

@@ -40,7 +40,7 @@ fun AppNavHost() {
 
         // --- Flujo Principal (con MainShell) ---
         composable(Route.Home.path) {
-            MainShell(navController) { HomeScreen() }
+            MainShell(navController) { HomeScreen(navController = navController) }
         }
         composable(Route.Servicios.path) {
             MainShell(navController) { ServiciosScreen(navController = navController) }
