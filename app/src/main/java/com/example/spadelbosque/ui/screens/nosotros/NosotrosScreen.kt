@@ -2,6 +2,7 @@ package com.example.spadelbosque.ui.screens.nosotros
 
 import android.net.Uri
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -20,6 +21,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.spadelbosque.R
@@ -28,20 +30,38 @@ import com.example.spadelbosque.viewmodel.NosotrosViewModel
 @Composable
 fun NosotrosScreen(viewModel: NosotrosViewModel = viewModel()) {
     val uiState by viewModel.uiState.collectAsState()
-
+    val uriHandler = LocalUriHandler.current
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(24.dp) // Espacio entre secciones
+        verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         item {
             InfoSection(title = "Ubicación y Contacto") {
                 InfoRow(icon = Icons.Default.LocationOn, text = uiState.direccion)
-                InfoRow(icon = Icons.Default.Phone, text = uiState.telefono)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                    modifier = Modifier.clickable {
+                        uriHandler.openUri("tel:${uiState.telefono}")
+                    }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Phone,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                    Text(
+                        text = uiState.telefono,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.primary,
+                        textDecoration = TextDecoration.Underline
+                    )
+                }
+
                 InfoRow(icon = Icons.Default.Email, text = uiState.email)
             }
         }
-
         item {
             InfoSection(title = "Horarios") {
                 uiState.horarios.forEach { horario ->
@@ -53,6 +73,8 @@ fun NosotrosScreen(viewModel: NosotrosViewModel = viewModel()) {
         item {
             MapaCard(direccion = uiState.direccion)
         }
+
+
     }
 }
 
@@ -74,10 +96,20 @@ private fun InfoSection(title: String, content: @Composable ColumnScope.() -> Un
 }
 
 @Composable
-private fun InfoRow(icon: ImageVector, text: String) {
+private fun InfoRow(
+    icon: ImageVector,
+    text: String,
+    onClick: (() -> Unit)? = null
+) {
+    val modifier = if (onClick != null) {
+        Modifier.clickable(onClick = onClick) // <-- 2. Haz que la fila sea clickeable si hay un onClick
+    } else {
+        Modifier // <-- 3. Si no, no hagas nada
+    }
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = modifier
     ) {
         Icon(
             imageVector = icon,
@@ -90,6 +122,7 @@ private fun InfoRow(icon: ImageVector, text: String) {
 }
 
 // Card que muestra el mapa y abre Google Maps al hacer clic
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun MapaCard(direccion: String) {
@@ -111,3 +144,4 @@ private fun MapaCard(direccion: String) {
         )
     }
 }
+
