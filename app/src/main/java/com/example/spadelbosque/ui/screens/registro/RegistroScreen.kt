@@ -256,19 +256,31 @@ fun RegistroScreen(
                     // Botón Registrarse
                     Button(
                         onClick = {
-                            if (viewModel.validarRegistro()) {
-                                // TODO: implementar lógica de registro
-                                navController.navigate(Route.Login.path) {
-                                    popUpTo(Route.Registro.path) { inclusive = true }
+                            viewModel.intentarRegistro(
+                                onSuccess = {
+                                    navController.navigate(Route.Login.path) {
+                                        popUpTo(Route.Registro.path) { inclusive = true }
+                                    }
+                                },
+                                onError = { mensaje ->
+                                    // El error ya se muestra en los campos correspondientes
                                 }
-                            }
+                            )
                         },
                         modifier = Modifier.fillMaxWidth(),
+                        enabled = !viewModel.registroLoading.collectAsState().value,
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.primary
                         )
                     ) {
-                        Text("Registrarse", style = MaterialTheme.typography.titleMedium)
+                        if (viewModel.registroLoading.collectAsState().value) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(20.dp),
+                                color = MaterialTheme.colorScheme.onPrimary
+                            )
+                        } else {
+                            Text("Registrarse", style = MaterialTheme.typography.titleMedium)
+                        }
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))

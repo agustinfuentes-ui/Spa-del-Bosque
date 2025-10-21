@@ -1,19 +1,35 @@
 package com.example.spadelbosque.viewmodel
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.spadelbosque.model.LoginErrores
 import com.example.spadelbosque.model.Login
 import com.example.spadelbosque.model.RegistroErrores
 import com.example.spadelbosque.model.Registro
+import com.example.spadelbosque.model.Usuario
+import com.example.spadelbosque.repository.AuthRepositoryImpl
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-class AuthViewModel : ViewModel() {
+/**
+ * ViewModel que maneja la autenticación usando Room.
+ * Extiende AndroidViewModel para acceder al Context.
+ */
+class AuthViewModel(application: Application) : AndroidViewModel(application) {
 
-    // login
+    // Repository para persistencia con Room
+    private val repository = AuthRepositoryImpl(application)
+
+    // ========== LOGIN ==========
+
     private val _loginState = MutableStateFlow(Login())
     val loginState: StateFlow<Login> = _loginState
+
+    private val _loginLoading = MutableStateFlow(false)
+    val loginLoading: StateFlow<Boolean> = _loginLoading
 
     fun onCorreoLoginChange(valor: String) {
         _loginState.update { it.copy(correo = valor, errores = it.errores.copy(correo = null)) }
@@ -55,9 +71,59 @@ class AuthViewModel : ViewModel() {
         return !hayErrores
     }
 
-    // registro
+    /**
+     * Intenta hacer login con las credenciales ingresadas.
+     * Usa coroutine porque Room requiere suspend functions.
+     * @param onSuccess Callback cuando el login es exitoso
+     * @param onError Callback cuando hay error
+     */
+    fun intentarLogin(
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        if (!validarLogin()) return
+
+        _loginLoading.value = true
+
+        viewModelScope.launch {
+            try {
+                val estadoActual = _loginState.value
+                val usuario = repository.validarCredenciales(
+                    estadoActual.correo,
+                    estadoActual.password
+                )
+
+                if (usuario != null) {
+                    // Guardar sesión
+                    repository.guardarSesion(usuario)
+                    _loginLoading.value = false
+                    onSuccess()
+                } else {
+                    // Credenciales incorrectas
+                    _loginState.update {
+                        it.copy(
+                            errores = it.errores.copy(
+                                password = "Correo o contraseña incorrectos"
+                            )
+                        )
+                    }
+                    _loginLoading.value = false
+                    onError("Credenciales incorrectas")
+                }
+            } catch (e: Exception) {
+                _loginLoading.value = false
+                onError("Error al iniciar sesión: ${e.message}")
+            }
+        }
+    }
+
+    // ========== REGISTRO ==========
+
     private val _registroState = MutableStateFlow(Registro())
     val registroState: StateFlow<Registro> = _registroState
+
+    private val _registroLoading = MutableStateFlow(false)
+    val registroLoading: StateFlow<Boolean> = _registroLoading
 
     fun onNombresChange(valor: String) {
         _registroState.update { it.copy(nombres = valor, errores = it.errores.copy(nombres = null)) }
@@ -80,7 +146,6 @@ class AuthViewModel : ViewModel() {
     }
 
     fun onTelefonoChange(valor: String) {
-        // Solo permitir números
         val soloNumeros = valor.filter { it.isDigit() }
         _registroState.update { it.copy(telefono = soloNumeros, errores = it.errores.copy(telefono = null)) }
     }
@@ -141,5 +206,64 @@ class AuthViewModel : ViewModel() {
 
         _registroState.update { it.copy(errores = errores) }
         return !hayErrores
+    }
+
+    /**
+     * Intenta registrar un nuevo usuario.
+     * @param onSuccess Callback cuando el registro es exitoso
+     * @param onError Callback cuando hay error
+     */
+    fun intentarRegistro(
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        if (!validarRegistro()) return
+
+        _registroLoading.value = true
+
+        viewModelScope.launch {
+            try {
+                val estadoActual = _registroState.value
+
+                // Verificar si el correo ya existe
+                if (repository.existeUsuario(estadoActual.correo)) {
+                    _registroState.update {
+                        it.copy(
+                            errores = it.errores.copy(
+                                correo = "Este correo ya está registrado"
+                            )
+                        )
+                    }
+                    _registroLoading.value = false
+                    onError("El correo ya está registrado")
+                    return@launch
+                }
+
+                // Crear nuevo usuario
+                val nuevoUsuario = Usuario(
+                    nombres = estadoActual.nombres,
+                    apellidos = estadoActual.apellidos,
+                    correo = estadoActual.correo,
+                    password = estadoActual.password,
+                    telefono = estadoActual.telefono
+                )
+
+                // Guardar en Room
+                val exito = repository.registrarUsuario(nuevoUsuario)
+
+                _registroLoading.value = false
+
+                if (exito) {
+                    // Limpiar formulario
+                    _registroState.value = Registro()
+                    onSuccess()
+                } else {
+                    onError("Error al registrar usuario")
+                }
+            } catch (e: Exception) {
+                _registroLoading.value = false
+                onError("Error: ${e.message}")
+            }
+        }
     }
 }
