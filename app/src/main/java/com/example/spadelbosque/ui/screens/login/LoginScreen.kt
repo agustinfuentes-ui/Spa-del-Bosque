@@ -179,21 +179,32 @@ fun LoginScreen(
                     // Botón Ingresar
                     Button(
                         onClick = {
-                            if (viewModel.validarLogin()) {
-                                // TODO: implementar lógica de autenticación
-                                navController.navigate(Route.Home.path) {
-                                    popUpTo("main") { inclusive = true }
+                            viewModel.intentarLogin(
+                                onSuccess = {
+                                    navController.navigate(Route.Home.path) {
+                                        popUpTo(Route.Login.path) { inclusive = true }
+                                    }
+                                },
+                                onError = { mensaje ->
+                                    // El error ya se muestra en el campo de password
                                 }
-                            }
+                            )
                         },
                         modifier = Modifier.fillMaxWidth(),
+                        enabled = !viewModel.loginLoading.collectAsState().value, // Deshabilitar mientras carga
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.primary
                         )
                     ) {
-                        Text("Ingresar", style = MaterialTheme.typography.titleMedium)
+                        if (viewModel.loginLoading.collectAsState().value) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(20.dp),
+                                color = MaterialTheme.colorScheme.onPrimary
+                            )
+                        } else {
+                            Text("Ingresar", style = MaterialTheme.typography.titleMedium)
+                        }
                     }
-
                     Spacer(modifier = Modifier.height(16.dp))
 
                     // Divisor
