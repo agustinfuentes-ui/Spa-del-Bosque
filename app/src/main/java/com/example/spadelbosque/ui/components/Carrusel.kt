@@ -11,8 +11,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.Image
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.*
+import androidx.compose.material3.carousel.HorizontalMultiBrowseCarousel
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 
 
@@ -35,14 +37,17 @@ fun Carrusel() {
         )
     }
 
-    HorizontalUncontainedCarousel(
+    val screenWith = LocalConfiguration.current.screenWidthDp.dp
+    val itemWith = screenWith / 1.1f
+
+    HorizontalMultiBrowseCarousel(
         state = rememberCarouselState { carouselItems.count() },
 
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
             .padding(top = 16.dp, bottom = 16.dp),
-        itemWidth   = 186.dp,
+        preferredItemWidth   = itemWith,
         itemSpacing = 8.dp,
         contentPadding = PaddingValues(horizontal = 16.dp)
     ) { i ->
