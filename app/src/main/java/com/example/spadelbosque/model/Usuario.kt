@@ -10,7 +10,8 @@ data class Usuario(
     val apellidos: String = "",
     val correo: String = "",
     val password: String = "",
-    val telefono: String = ""
+    val telefono: String = "",
+    val fotoUri: String? = null
 ) {
     // Nombre completo para mostrar en UI
     fun nombreCompleto(): String = "$nombres $apellidos"

@@ -32,7 +32,7 @@ import com.example.spadelbosque.viewmodel.AuthViewModel
 @Composable
 fun RegistroScreen(
     navController: NavController,
-    viewModel: AuthViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+    viewModel: AuthViewModel
 ) {
     val estado by viewModel.registroState.collectAsState()
 
@@ -317,10 +317,3 @@ fun RegistroScreen(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun RegistroScreenPreview() {
-    SpaTheme {
-        RegistroScreen(navController = rememberNavController())
-    }
-}

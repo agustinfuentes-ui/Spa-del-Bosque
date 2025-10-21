@@ -135,7 +135,7 @@ private fun MapaCard(direccion: String) {
         onClick = { uriHandler.openUri(urlMapa) }
     ) {
         Image(
-            painter = painterResource(id = R.drawable.mapa_placeholder),
+            painter = painterResource(id = R.drawable.mapa_spa),
             contentDescription = "Mapa de ubicación del spa",
             modifier = Modifier
                 .fillMaxWidth()

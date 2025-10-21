@@ -16,7 +16,7 @@ interface UsuarioDao {
      * Inserta un nuevo usuario en la base de datos.
      * Si el correo ya existe, falla (onConflict = ABORT)
      */
-    @Insert(onConflict = OnConflictStrategy.Companion.ABORT)
+    @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertar(usuario: UsuarioEntity)
 
     /**
@@ -39,6 +39,29 @@ interface UsuarioDao {
     @Query("SELECT * FROM usuarios WHERE correo = :correo LIMIT 1")
     suspend fun obtenerPorCorreo(correo: String): UsuarioEntity?
 
+    @Query("SELECT * FROM usuarios WHERE id = :id LIMIT 1")
+    suspend fun obtenerPorId(id: String): UsuarioEntity?
+
+    /**
+     * Actualiza el perfil del usuario.
+     * Debe devolver Int para indicar las filas afectadas.
+     */
+    @Query("""
+        UPDATE usuarios 
+        SET nombres = :nombres,
+            apellidos = :apellidos,
+            telefono = :telefono,
+            fotoUri = :fotoUri
+        WHERE id = :id
+    """)
+    suspend fun actualizarPerfil(
+        id: String,
+        nombres: String,
+        apellidos: String,
+        telefono: String,
+        fotoUri: String?
+    ): Int // <--- CORRECCIÓN: Se añade el Int de retorno
+
     /**
      * Obtiene todos los usuarios (útil para debug).
      */
@@ -47,7 +70,8 @@ interface UsuarioDao {
 
     /**
      * Elimina todos los usuarios (útil para limpiar en desarrollo).
+     * Debe devolver Int para indicar las filas afectadas.
      */
     @Query("DELETE FROM usuarios")
-    suspend fun eliminarTodos()
+    suspend fun eliminarTodos(): Int // <--- CORRECCIÓN: Se añade el Int de retorno
 }

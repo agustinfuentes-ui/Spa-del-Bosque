@@ -30,7 +30,7 @@ import com.example.spadelbosque.viewmodel.AuthViewModel
 @Composable
 fun LoginScreen(
     navController: NavController,
-    viewModel: AuthViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
+    viewModel: AuthViewModel
 ) {
     val estado by viewModel.loginState.collectAsState()
 
@@ -239,10 +239,3 @@ fun LoginScreen(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun LoginScreenPreview() {
-    SpaTheme {
-        LoginScreen(navController = rememberNavController())
-    }
-}

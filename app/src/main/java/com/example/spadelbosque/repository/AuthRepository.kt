@@ -20,4 +20,8 @@ interface AuthRepository {
     suspend fun obtenerSesionActiva(): Usuario?
     suspend fun cerrarSesion()
     suspend fun haySesionActiva(): Boolean
+
+    // Perfil
+    suspend fun obtenerPerfilActual(): Usuario?                 // <---
+    suspend fun actualizarPerfil(usuario: Usuario): Boolean
 }

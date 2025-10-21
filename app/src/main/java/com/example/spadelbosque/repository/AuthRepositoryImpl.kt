@@ -1,110 +1,81 @@
 package com.example.spadelbosque.repository
 
 import android.content.Context
-import android.content.SharedPreferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
+import com.example.spadelbosque.data.dataStore
 import com.example.spadelbosque.data.local.AppDatabase
 import com.example.spadelbosque.data.local.toEntity
 import com.example.spadelbosque.data.local.toUsuario
 import com.example.spadelbosque.model.Usuario
-import com.google.gson.Gson
+import kotlinx.coroutines.flow.first
 
-/**
- * Implementación de AuthRepository usando Room (SQLite) para usuarios
- * y SharedPreferences para la sesión activa.
- */
-class AuthRepositoryImpl(context: Context) : AuthRepository {
+class AuthRepositoryImpl(
+    private val context: Context,
+    private val db: AppDatabase
+) : AuthRepository {
 
-    // Base de datos Room
-    private val database = AppDatabase.getDatabase(context)
-    private val usuarioDao = database.usuarioDao()
+    private val KEY_SESION = stringPreferencesKey("correo_sesion")
 
-    // SharedPreferences solo para sesión activa (más rápido que Room)
-    private val prefs: SharedPreferences =
-        context.getSharedPreferences("spa_sesion", Context.MODE_PRIVATE)
-    private val gson = Gson()
-
-    // ========== REGISTRO ==========
-
-    /**
-     * Registra un nuevo usuario en la base de datos.
-     * @return true si se registró exitosamente, false si el correo ya existe
-     */
     override suspend fun registrarUsuario(usuario: Usuario): Boolean {
-        return try {
-            // Verificar si ya existe
-            if (usuarioDao.existeUsuario(usuario.correo)) {
-                return false
-            }
-
-            // Convertir a Entity y guardar en Room
-            val entity = usuario.toEntity()
-            usuarioDao.insertar(entity)
-            true
-        } catch (e: Exception) {
-            false
-        }
+        if (existeUsuario(usuario.correo)) return false
+        // CORRECCIÓN: Convertir el modelo a entidad antes de insertar
+        db.usuarioDao().insertar(usuario.toEntity())
+        return true
     }
 
-    // ========== LOGIN ==========
-
-    /**
-     * Valida las credenciales del usuario contra la base de datos.
-     * @return Usuario si las credenciales son correctas, null si no
-     */
     override suspend fun validarCredenciales(correo: String, password: String): Usuario? {
-        return try {
-            val entity = usuarioDao.validarCredenciales(correo, password)
-            entity?.toUsuario()
-        } catch (e: Exception) {
-            null
-        }
+        // CORRECCIÓN: Usar la función correcta del DAO y convertir la entidad a modelo
+        val usuarioEntity = db.usuarioDao().validarCredenciales(correo, password)
+        return usuarioEntity?.toUsuario()
     }
 
-    /**
-     * Verifica si existe un usuario con el correo dado.
-     */
     override suspend fun existeUsuario(correo: String): Boolean {
-        return try {
-            usuarioDao.existeUsuario(correo)
-        } catch (e: Exception) {
-            false
+        // CORRECCIÓN: Usar la función correcta del DAO
+        return db.usuarioDao().existeUsuario(correo)
+    }
+
+    override suspend fun guardarSesion(usuario: Usuario) {
+        context.dataStore.edit {
+            it[KEY_SESION] = usuario.correo
         }
     }
 
-    // ========== SESIÓN ==========
-
-    /**
-     * Guarda la sesión activa en SharedPreferences.
-     * (Usamos SharedPreferences aquí porque es más rápido que Room para este caso)
-     */
-    override suspend fun guardarSesion(usuario: Usuario) {
-        val usuarioJson = gson.toJson(usuario)
-        prefs.edit().putString("sesion_activa", usuarioJson).apply()
-    }
-
-    /**
-     * Obtiene el usuario de la sesión activa.
-     */
     override suspend fun obtenerSesionActiva(): Usuario? {
-        val usuarioJson = prefs.getString("sesion_activa", null) ?: return null
-        return try {
-            gson.fromJson(usuarioJson, Usuario::class.java)
-        } catch (e: Exception) {
+        val preferences = context.dataStore.data.first()
+        val correo = preferences[KEY_SESION]
+        return if (correo != null) {
+            // CORRECCIÓN: Usar la función correcta y convertir la entidad a modelo
+            db.usuarioDao().obtenerPorCorreo(correo)?.toUsuario()
+        } else {
             null
         }
     }
 
-    /**
-     * Cierra la sesión eliminando los datos de SharedPreferences.
-     */
     override suspend fun cerrarSesion() {
-        prefs.edit().remove("sesion_activa").apply()
+        context.dataStore.edit {
+            it.remove(KEY_SESION)
+        }
     }
 
-    /**
-     * Verifica si hay una sesión activa.
-     */
     override suspend fun haySesionActiva(): Boolean {
-        return obtenerSesionActiva() != null
+        val preferences = context.dataStore.data.first()
+        return preferences[KEY_SESION] != null
+    }
+
+    override suspend fun obtenerPerfilActual(): Usuario? {
+        return obtenerSesionActiva()
+    }
+
+    override suspend fun actualizarPerfil(usuario: Usuario): Boolean {
+        // CORRECCIÓN: Usar la función del DAO que actualiza y pasar los parámetros correctos
+        val rowsAffected = db.usuarioDao().actualizarPerfil(
+            id = usuario.id,
+            nombres = usuario.nombres,
+            apellidos = usuario.apellidos,
+            telefono = usuario.telefono,
+            fotoUri = usuario.fotoUri
+        )
+        return rowsAffected > 0
     }
 }

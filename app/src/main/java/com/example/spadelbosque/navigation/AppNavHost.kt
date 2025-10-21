@@ -23,18 +23,21 @@ import com.example.spadelbosque.model.ItemCarrito
 import com.example.spadelbosque.viewmodel.AuthViewModel
 import com.example.spadelbosque.viewmodel.ContactoViewModel
 import com.example.spadelbosque.viewmodel.CarritoViewModel
+import com.example.spadelbosque.viewmodel.PerfilViewModel
+import com.example.spadelbosque.viewmodel.factory.PerfilVmFactory
 import com.example.spadelbosque.di.AppGraph
 import com.example.spadelbosque.viewmodel.factory.CarritoVmFactory
+import com.example.spadelbosque.viewmodel.factory.AuthVmFactory
 
 @Composable
 fun AppNavHost() {
     val navController = rememberNavController()
-    val authViewModel: AuthViewModel = viewModel()
-
+    val authViewModel: AuthViewModel =
+        viewModel(factory = AuthVmFactory(AppGraph.authRepo))
 
     NavHost(
         navController = navController,
-        startDestination = Route.Home.path
+        startDestination = Route.Login.path
     ) {
         // --- Flujo de Autenticación ---
         composable(Route.Login.path) {
@@ -50,7 +53,6 @@ fun AppNavHost() {
         }
 
         composable(Route.Servicios.path) {
-            // ViewModel con factory (usa repo único de AppGraph)
             val carritoVm: CarritoViewModel =
                 viewModel(factory = CarritoVmFactory(AppGraph.cartRepo))
 
@@ -73,9 +75,32 @@ fun AppNavHost() {
             val contactoViewModel: ContactoViewModel = viewModel()
             MainShell(navController) { ContactoScreen(navController, contactoViewModel) }
         }
+
         composable(Route.Perfil.path) {
-            MainShell(navController) { PerfilScreen() }
+            val perfilVm: PerfilViewModel = viewModel(
+                factory = PerfilVmFactory(AppGraph.app, AppGraph.authRepo)
+            )
+
+            MainShell(navController) {
+                PerfilScreen(
+                    authVm = authViewModel,
+                    perfilVm = perfilVm,
+                    onIrLogin = { navController.navigate(Route.Login.path) },
+                    // Lógica de cierre de sesión corregida con callback
+                    onCerrarSesion = {
+                        authViewModel.cerrarSesion {
+                            navController.navigate(Route.Login.path) {
+                                popUpTo(navController.graph.id) { inclusive = true }
+                            }
+                        }
+                    },
+                    onEditar = {
+                        // Por ahora no hace nada
+                    }
+                )
+            }
         }
+
         composable(
             route = "servicio_detalle/{sku}",
             arguments = listOf(navArgument("sku") { type = NavType.StringType })

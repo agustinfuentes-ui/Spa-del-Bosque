@@ -104,11 +104,3 @@ fun HomeScreen(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun HomeScreenPreview() {
-    SpaTheme {
-        // Se añade un NavController de prueba para la previsualización
-        HomeScreen(navController = rememberNavController())
-    }
-}

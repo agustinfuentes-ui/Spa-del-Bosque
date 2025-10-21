@@ -15,31 +15,21 @@ import androidx.room.RoomDatabase
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
-
-    // DAO para acceder a la tabla de usuarios
     abstract fun usuarioDao(): UsuarioDao
 
     companion object {
-        // Singleton para evitar múltiples instancias de la BD
-        @Volatile
-        private var INSTANCE: AppDatabase? = null
+        @Volatile private var INSTANCE: AppDatabase? = null
 
-        /**
-         * Obtiene la instancia única de la base de datos.
-         * Si no existe, la crea.
-         */
-        fun getDatabase(context: Context): AppDatabase {
-            return INSTANCE ?: synchronized(this) {
-                val instance = Room.databaseBuilder(
+        fun getDatabase(context: Context): AppDatabase =
+            INSTANCE ?: synchronized(this) {
+                Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
-                    "spa_database" // Nombre del archivo de base de datos
+                    "spa_db"
                 )
-                    .fallbackToDestructiveMigration() // En desarrollo: borra BD si cambia versión
+                    .fallbackToDestructiveMigration()   // <--- evita crash por cambios de schema
                     .build()
-                INSTANCE = instance
-                instance
+                    .also { INSTANCE = it }
             }
-        }
     }
 }
