@@ -56,11 +56,3 @@ fun BlogScreen(viewModel: BlogViewModel = BlogViewModel()) {
         }
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-fun BlogScreenPreview() {
-    SpaTheme  {
-        BlogScreen()
-    }
-}

@@ -6,12 +6,12 @@ import kotlinx.coroutines.flow.asStateFlow
 
 // 1. Define un estado para los datos de la pantalla
 data class NosotrosUiState(
-    val direccion: String = "Av. Manantiales 1420, Concón",
-    val telefono: String = "+56 9 8765 4321",
-    val email: String = "contacto@spadelbosque.cl",
+    val direccion: String = "Duble Almeyda 80, Reñaca, Viña del Mar",
+    val telefono: String = "+56 9 9440 2521",
+    val email: String = "spa@hbdr.cl",
     val horarios: List<String> = listOf(
         "Martes a Sábado: 10:00 - 20:00",
-        "Domingo: 10:00 - 16:00",
+        "Domingo: 10:00 - 20:00",
         "Lunes: Cerrado"
     )
 )

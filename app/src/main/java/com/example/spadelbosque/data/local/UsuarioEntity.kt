@@ -17,6 +17,7 @@ data class UsuarioEntity(
     val correo: String,
     val password: String,
     val telefono: String,
+    val fotoUri: String? = null,
     val fechaRegistro: Long = System.currentTimeMillis()
 )
 
@@ -32,7 +33,8 @@ fun UsuarioEntity.toUsuario(): Usuario {
         apellidos = apellidos,
         correo = correo,
         password = password,
-        telefono = telefono
+        telefono = telefono,
+        fotoUri = fotoUri
     )
 }
 
@@ -46,6 +48,7 @@ fun Usuario.toEntity(): UsuarioEntity {
         apellidos = apellidos,
         correo = correo,
         password = password,
-        telefono = telefono
+        telefono = telefono,
+        fotoUri = fotoUri
     )
 }
