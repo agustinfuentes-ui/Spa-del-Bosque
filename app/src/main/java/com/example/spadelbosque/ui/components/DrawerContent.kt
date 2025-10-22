@@ -13,21 +13,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.spadelbosque.navigation.Route
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.material3.NavigationRail
+import androidx.compose.material3.NavigationRailItem
 
+private fun drawerItems(): List<Triple<String, ImageVector, String>> = listOf(
+    Triple("Home", Icons.Filled.Home, Route.Home.path),
+    Triple("Servicios", Icons.Filled.Spa, Route.Servicios.path),
+    Triple("Blogs", Icons.Filled.Newspaper, Route.Blogs.path),
+    Triple("Nosotros", Icons.Filled.Info, Route.Nosotros.path),
+    Triple("Contacto", Icons.Filled.Phone, Route.Contacto.path),
+    // Si quieres Perfil en el rail, agrégalo aquí:
+    // Triple("Perfil", Icons.Filled.Person, Route.Perfil.path),
+)
 @Composable
 fun DrawerContent(
     navController: NavController,
     currentRoute: String?,
     onCloseDrawer: () -> Unit
 ) {
-    val items = listOf(
-        Triple("Home", Icons.Filled.Home, Route.Home.path),
-        Triple("Servicios", Icons.Filled.Spa, Route.Servicios.path),
-        Triple("Blogs", Icons.Filled.Newspaper, Route.Blogs.path),
-        Triple("Nosotros", Icons.Filled.Info, Route.Nosotros.path),
-        Triple("Contacto", Icons.Filled.Phone, Route.Contacto.path),
+    val items = drawerItems()
 
-    )
     ModalDrawerSheet {
         Text(
             text = "SPA del Bosque",
@@ -48,6 +54,29 @@ fun DrawerContent(
                     onCloseDrawer()
                 },
                 modifier = Modifier.padding(horizontal = 12.dp)
+            )
+        }
+    }
+}
+
+@Composable
+fun RailContent(
+    navController: NavController,
+    currentRoute: String?
+) {
+    NavigationRail {
+        drawerItems().forEach { (label, icon, route) ->
+            NavigationRailItem(
+                selected = currentRoute == route,
+                onClick = {
+                    navController.navigate(route) {
+                        popUpTo("main") { saveState = true }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                },
+                icon = { Icon(icon, contentDescription = label) },
+                label = { Text(label) }
             )
         }
     }

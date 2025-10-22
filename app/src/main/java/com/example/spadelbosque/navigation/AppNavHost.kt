@@ -28,9 +28,12 @@ import com.example.spadelbosque.viewmodel.factory.PerfilVmFactory
 import com.example.spadelbosque.di.AppGraph
 import com.example.spadelbosque.viewmodel.factory.CarritoVmFactory
 import com.example.spadelbosque.viewmodel.factory.AuthVmFactory
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
+
 
 @Composable
-fun AppNavHost() {
+fun AppNavHost(windowSizeClass: WindowSizeClass) {
     val navController = rememberNavController()
     val authViewModel: AuthViewModel =
         viewModel(factory = AuthVmFactory(AppGraph.authRepo))
@@ -49,14 +52,15 @@ fun AppNavHost() {
 
         // --- Flujo Principal (con MainShell) ---
         composable(Route.Home.path) {
-            MainShell(navController) { HomeScreen(navController = navController) }
+            MainShell(navController , windowSizeClass) {
+                HomeScreen(navController = navController) }
         }
 
         composable(Route.Servicios.path) {
             val carritoVm: CarritoViewModel =
                 viewModel(factory = CarritoVmFactory(AppGraph.cartRepo))
 
-            MainShell(navController) {
+            MainShell(navController, windowSizeClass) {
                 ServiciosScreen(
                     navController = navController,
                     onAgregar = { sku: String, nombre: String, precio: Int ->
@@ -66,14 +70,14 @@ fun AppNavHost() {
             }
         }
         composable(Route.Blogs.path) {
-            MainShell(navController) { BlogScreen() }
+            MainShell(navController, windowSizeClass) { BlogScreen() }
         }
         composable(Route.Nosotros.path) {
-            MainShell(navController) { NosotrosScreen() }
+            MainShell(navController, windowSizeClass) { NosotrosScreen() }
         }
         composable(Route.Contacto.path) {
             val contactoViewModel: ContactoViewModel = viewModel()
-            MainShell(navController) { ContactoScreen(navController, contactoViewModel) }
+            MainShell(navController, windowSizeClass) { ContactoScreen(navController, contactoViewModel) }
         }
 
         composable(Route.Perfil.path) {
@@ -81,7 +85,7 @@ fun AppNavHost() {
                 factory = PerfilVmFactory(AppGraph.app, AppGraph.authRepo)
             )
 
-            MainShell(navController) {
+            MainShell(navController, windowSizeClass) {
                 PerfilScreen(
                     authVm = authViewModel,
                     perfilVm = perfilVm,
@@ -108,7 +112,7 @@ fun AppNavHost() {
             val sku = backStackEntry.arguments?.getString("sku") ?: ""
             val carritoVm: CarritoViewModel =
                 viewModel(factory = CarritoVmFactory(AppGraph.cartRepo))
-            MainShell(navController) {
+            MainShell(navController, windowSizeClass) {
                 ServicioDetalleScreen(navController = navController,
                     servicioSku = sku,
                     onAgregar = { sku: String, nombre: String, precio: Int ->
@@ -118,7 +122,7 @@ fun AppNavHost() {
         }
         composable(Route.Carrito.path) {
             val carritoVm: CarritoViewModel =  viewModel(factory = CarritoVmFactory(AppGraph.cartRepo))
-            MainShell(navController)
+            MainShell(navController, windowSizeClass)
             {
                 CarritoScreen(
                     vm = carritoVm,
@@ -135,7 +139,7 @@ fun AppNavHost() {
         composable(Route.Compra.path) {
             val carritoVm: CarritoViewModel =
                 viewModel(factory = CarritoVmFactory(AppGraph.cartRepo))
-            MainShell(navController) {
+            MainShell(navController, windowSizeClass) {
                 CompraScreen(
                     carritoVm = carritoVm,
                     onCancelar = {
