@@ -1,6 +1,8 @@
 [versions]
 # Configuración de versiones estable y probada
+accompanistNavigationAnimation = "0.36.0"
 agp = "8.6.0"
+animation = "1.9.3"
 kotlin = "2.0.21"
 ksp = "2.0.21-1.0.25"
 
@@ -23,6 +25,8 @@ kotlinxCoroutines = "1.10.2"
 gson = "2.10.1"
 
 [libraries]
+accompanist-navigation-animation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanistNavigationAnimation" }
+androidx-compose-animation = { module = "androidx.compose.animation:animation", version.ref = "animation" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

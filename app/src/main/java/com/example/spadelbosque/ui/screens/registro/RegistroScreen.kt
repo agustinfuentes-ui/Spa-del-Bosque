@@ -8,10 +8,9 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -19,14 +18,15 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.example.spadelbosque.R
 import com.example.spadelbosque.navigation.Route
-import com.example.spadelbosque.ui.theme.SpaTheme
+import com.example.spadelbosque.ui.components.LoadingScreen
 import com.example.spadelbosque.viewmodel.AuthViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import androidx.compose.animation.*
 
 // Pantalla de registro de nuevos usuarios
 @Composable
@@ -35,7 +35,26 @@ fun RegistroScreen(
     viewModel: AuthViewModel
 ) {
     val estado by viewModel.registroState.collectAsState()
+    val isLoading by viewModel.registroLoading.collectAsState()
+    val coroutineScope = rememberCoroutineScope()
+    var mostrarExito by remember { mutableStateOf(false) }
 
+    // Mostrar loading full screen si está registrando
+    if (isLoading) {
+        LoadingScreen(mensaje = "Creando tu cuenta...")
+        return
+    }
+
+    // Ocultar mensaje de éxito después de unos segundos
+    LaunchedEffect(mostrarExito) {
+        if (mostrarExito) {
+            delay(1500) // espera a que la animación se vea
+            navController.navigate(Route.Login.path) {
+                popUpTo(Route.Registro.path) { inclusive = true }
+            }
+            mostrarExito = false
+        }
+    }
     Scaffold { padding ->
         Column(
             modifier = Modifier
@@ -258,22 +277,27 @@ fun RegistroScreen(
                         onClick = {
                             viewModel.intentarRegistro(
                                 onSuccess = {
-                                    navController.navigate(Route.Login.path) {
-                                        popUpTo(Route.Registro.path) { inclusive = true }
+                                    mostrarExito = true
+                                    coroutineScope.launch {
+                                        delay(1500) // tiempo para mostrar animación
+                                        navController.navigate(Route.Login.path) {
+                                            popUpTo(Route.Registro.path) { inclusive = true }
+                                        }
+                                        mostrarExito = false
                                     }
                                 },
                                 onError = { mensaje ->
-                                    // El error ya se muestra en los campos correspondientes
+                                    // Opcional: mostrar Snackbar o errores en campos
                                 }
                             )
                         },
                         modifier = Modifier.fillMaxWidth(),
-                        enabled = !viewModel.registroLoading.collectAsState().value,
+                        enabled = !isLoading, // se desactiva mientras carga
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.primary
                         )
                     ) {
-                        if (viewModel.registroLoading.collectAsState().value) {
+                        if (isLoading) {
                             CircularProgressIndicator(
                                 modifier = Modifier.size(20.dp),
                                 color = MaterialTheme.colorScheme.onPrimary
@@ -284,6 +308,36 @@ fun RegistroScreen(
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
+
+                    AnimatedVisibility(
+                        visible = mostrarExito,
+                        enter = fadeIn() + slideInVertically(initialOffsetY = { it / 2 }),
+                        exit = fadeOut() + slideOutVertically(targetOffsetY = { -it / 2 })
+                    ) {
+                        Card(
+                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 24.dp)
+                        ) {
+                            Row(
+                                modifier = Modifier.padding(16.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.CheckCircle,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
+                                Spacer(modifier = Modifier.width(12.dp))
+                                Text(
+                                    "¡Registro exitoso!",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                                )
+                            }
+                        }
+                    }
 
                     // Divisor
                     HorizontalDivider()
