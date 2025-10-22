@@ -87,9 +87,6 @@ class AuthViewModel(private val repo: AuthRepository
         viewModelScope.launch {
             try {
                 val estadoActual = _loginState.value
-                // Simular procesamiento real (solo para UX)
-                kotlinx.coroutines.delay(1200)
-
                 val usuario = repo.validarCredenciales(
                     estadoActual.correo,
                     estadoActual.password
@@ -97,7 +94,7 @@ class AuthViewModel(private val repo: AuthRepository
 
                 if (usuario != null) {
                     repo.guardarSesion(usuario)
-                    _sesionState.value = usuario
+                    _sesionState.value = usuario // Actualizar el estado de sesión
                     _loginLoading.value = false
                     onSuccess()
                 } else {
@@ -117,6 +114,7 @@ class AuthViewModel(private val repo: AuthRepository
             }
         }
     }
+
     // ========== REGISTRO ==========
 
     private val _registroState = MutableStateFlow(Registro())
