@@ -1,18 +1,15 @@
 package com.example.spadelbosque.ui.components
 
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 /**
- * Chip con animación de color cuando se selecciona.
- * Reutilizable para categorías y etiquetas.
+ * Chip verde con texto blanco (estilo SPA del Bosque)
+ * Reutilizable tanto para categorías como etiquetas.
  */
 @Composable
 fun CategoriaChip(
@@ -20,30 +17,21 @@ fun CategoriaChip(
     selected: Boolean = false,
     modifier: Modifier = Modifier
 ) {
-    // ANIMACIÓN: Color animado según selección
-    val backgroundColor by animateColorAsState(
-        targetValue = if (selected) {
-            MaterialTheme.colorScheme.primary
-        } else {
-            MaterialTheme.colorScheme.surface
-        },
-        animationSpec = tween(durationMillis = 300),  // Duración de 300ms
-        label = "chip_background"
-    )
+    val background = if (selected) {
+        MaterialTheme.colorScheme.primary
+    } else {
+        MaterialTheme.colorScheme.surface
+    }
 
-    val textColor by animateColorAsState(
-        targetValue = if (selected) {
-            MaterialTheme.colorScheme.onPrimary
-        } else {
-            MaterialTheme.colorScheme.onSurfaceVariant
-        },
-        animationSpec = tween(durationMillis = 300),
-        label = "chip_text"
-    )
+    val textColor = if (selected) {
+        MaterialTheme.colorScheme.onPrimary
+    } else {
+        MaterialTheme.colorScheme.onSurfaceVariant
+    }
 
     Surface(
-        color = backgroundColor,  // ← Color animado
-        contentColor = textColor,  // ← Color animado
+        color = background,
+        contentColor = textColor,
         shape = RoundedCornerShape(50),
         border = if (!selected)
             androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
@@ -57,3 +45,4 @@ fun CategoriaChip(
         )
     }
 }
+

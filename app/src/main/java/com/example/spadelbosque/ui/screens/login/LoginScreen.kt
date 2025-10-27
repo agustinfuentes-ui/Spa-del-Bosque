@@ -17,23 +17,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.spadelbosque.R
 import com.example.spadelbosque.navigation.Route
+import com.example.spadelbosque.ui.theme.SpaTheme
 import com.example.spadelbosque.viewmodel.AuthViewModel
-import com.example.spadelbosque.ui.components.LoadingScreen
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.runtime.*
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import androidx.compose.animation.core.tween
-
 
 // Pantalla de inicio de sesión
 @Composable
@@ -42,16 +33,6 @@ fun LoginScreen(
     viewModel: AuthViewModel
 ) {
     val estado by viewModel.loginState.collectAsState()
-    val isLoading by viewModel.loginLoading.collectAsState()
-
-    var mostrarExito by remember { mutableStateOf(false) }
-    val coroutineScope = rememberCoroutineScope()
-
-    // Pantalla de loading
-    if (isLoading) {
-        LoadingScreen(mensaje = "Iniciando sesión...")
-        return
-    }
 
     Scaffold { padding ->
         Column(
@@ -195,32 +176,27 @@ fun LoginScreen(
 
                     Spacer(modifier = Modifier.height(24.dp))
 
-
+                    // Botón Ingresar
                     Button(
                         onClick = {
                             viewModel.intentarLogin(
                                 onSuccess = {
-                                    mostrarExito = true
-                                    coroutineScope.launch {
-                                        delay(1500) // Tiempo para ver la animación
-                                        navController.navigate(Route.Home.path) {
-                                            popUpTo(Route.Login.path) { inclusive = true }
-                                        }
+                                    navController.navigate(Route.Home.path) {
+                                        popUpTo(Route.Login.path) { inclusive = true }
                                     }
                                 },
                                 onError = { mensaje ->
-                                    // TODO: Mostrar Snackbar con el error
-                                    println("Error login: $mensaje")
+                                    // El error ya se muestra en el campo de password
                                 }
                             )
                         },
                         modifier = Modifier.fillMaxWidth(),
-                        enabled = !isLoading,
+                        enabled = !viewModel.loginLoading.collectAsState().value, // Deshabilitar mientras carga
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.primary
                         )
                     ) {
-                        if (isLoading) {
+                        if (viewModel.loginLoading.collectAsState().value) {
                             CircularProgressIndicator(
                                 modifier = Modifier.size(20.dp),
                                 color = MaterialTheme.colorScheme.onPrimary
@@ -229,42 +205,6 @@ fun LoginScreen(
                             Text("Ingresar", style = MaterialTheme.typography.titleMedium)
                         }
                     }
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    // Mensaje de éxito animado
-                    AnimatedVisibility(
-                        visible = mostrarExito,
-                        enter = fadeIn(animationSpec = tween(300)) +
-                                slideInVertically(initialOffsetY = { it / 2 }),
-                        exit = fadeOut(animationSpec = tween(300)) +
-                                slideOutVertically(targetOffsetY = { -it / 2 })
-                    ) {
-                        Card(
-                            colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colorScheme.primaryContainer
-                            ),
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Row(
-                                modifier = Modifier.padding(16.dp),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.CheckCircle,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.primary
-                                )
-                                Spacer(modifier = Modifier.width(12.dp))
-                                Text(
-                                    "¡Login exitoso!",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    color = MaterialTheme.colorScheme.onPrimaryContainer
-                                )
-                            }
-                        }
-                    }
-
                     Spacer(modifier = Modifier.height(16.dp))
 
                     // Divisor
