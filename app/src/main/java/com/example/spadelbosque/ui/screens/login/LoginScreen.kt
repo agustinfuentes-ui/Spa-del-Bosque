@@ -45,16 +45,12 @@ fun LoginScreen(
     val isLoading by viewModel.loginLoading.collectAsState()
 
     var mostrarExito by remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
 
+    // Pantalla de loading
     if (isLoading) {
         LoadingScreen(mensaje = "Iniciando sesión...")
         return
-    }
-    LaunchedEffect(mostrarExito) {
-        if (mostrarExito) {
-            delay(2000)
-            mostrarExito = false
-        }
     }
 
     Scaffold { padding ->
@@ -199,10 +195,6 @@ fun LoginScreen(
 
                     Spacer(modifier = Modifier.height(24.dp))
 
-                    // Botón Ingresar
-                    val isLoading by viewModel.loginLoading.collectAsState()
-                    val coroutineScope = rememberCoroutineScope()
-                    var mostrarExito by remember { mutableStateOf(false) }
 
                     Button(
                         onClick = {
@@ -210,21 +202,23 @@ fun LoginScreen(
                                 onSuccess = {
                                     mostrarExito = true
                                     coroutineScope.launch {
-                                        delay(500)
+                                        delay(1500) // Tiempo para ver la animación
                                         navController.navigate(Route.Home.path) {
                                             popUpTo(Route.Login.path) { inclusive = true }
                                         }
-                                        mostrarExito = false
                                     }
                                 },
                                 onError = { mensaje ->
-                                    //  Snackbar
+                                    // TODO: Mostrar Snackbar con el error
+                                    println("Error login: $mensaje")
                                 }
                             )
                         },
                         modifier = Modifier.fillMaxWidth(),
                         enabled = !isLoading,
-                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primary
+                        )
                     ) {
                         if (isLoading) {
                             CircularProgressIndicator(
@@ -237,19 +231,20 @@ fun LoginScreen(
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
+
                     // Mensaje de éxito animado
                     AnimatedVisibility(
                         visible = mostrarExito,
-                        enter = fadeIn(animationSpec = tween(300)) + slideInVertically(initialOffsetY = { it / 2 }),
-                        exit = fadeOut(animationSpec = tween(300)) + slideOutVertically(targetOffsetY = { -it / 2 })
+                        enter = fadeIn(animationSpec = tween(300)) +
+                                slideInVertically(initialOffsetY = { it / 2 }),
+                        exit = fadeOut(animationSpec = tween(300)) +
+                                slideOutVertically(targetOffsetY = { -it / 2 })
                     ) {
                         Card(
                             colors = CardDefaults.cardColors(
                                 containerColor = MaterialTheme.colorScheme.primaryContainer
                             ),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 24.dp)
+                            modifier = Modifier.fillMaxWidth()
                         ) {
                             Row(
                                 modifier = Modifier.padding(16.dp),
@@ -270,6 +265,7 @@ fun LoginScreen(
                         }
                     }
 
+                    Spacer(modifier = Modifier.height(16.dp))
 
                     // Divisor
                     HorizontalDivider()
@@ -302,4 +298,3 @@ fun LoginScreen(
         }
     }
 }
-

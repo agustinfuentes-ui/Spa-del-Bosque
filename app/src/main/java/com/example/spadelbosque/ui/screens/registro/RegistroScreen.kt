@@ -292,7 +292,7 @@ fun RegistroScreen(
                             )
                         },
                         modifier = Modifier.fillMaxWidth(),
-                        enabled = !isLoading, // se desactiva mientras carga
+                        enabled = !isLoading,
                         colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.primary
                         )
