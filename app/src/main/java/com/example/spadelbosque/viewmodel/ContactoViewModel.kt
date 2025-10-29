@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.update
 class ContactoViewModel : ViewModel() {
     private val _estado = MutableStateFlow(UsuarioUiState())
     val estado : StateFlow<UsuarioUiState> = _estado.asStateFlow()
+    val asuntosDisponibles = listOf("Consulta","Solicitud Reserva","Cancelacion Reserva","Reclamo")
 
     fun onNombreChange(valor: String) {
         val errorNombre = when {
@@ -22,14 +23,33 @@ class ContactoViewModel : ViewModel() {
         _estado.update { it.copy(nombre = valor, errores = it.errores.copy(nombre = errorNombre)) }
     }
     fun onCorreoChange(valor: String){
-        _estado.update { it.copy(correo = valor, errores = it.errores.copy(correo = null)) }
+        val dominiosPermitidos = listOf("gmail.com", "hotmail.com", "outlook.com", "duoc.cl", "profesor.duoc.cl")
+        val dominio = valor.substringAfter("@")
+        val errorCorreo = when {
+            "@" in valor && dominio.isNotBlank() -> {
+                if (dominiosPermitidos.any {dominio.equals(it, ignoreCase = true) }){
+                    null
+                }else{
+                    "Dominio no permitido"
+                }
+            }
+            "@" in valor && dominio.isBlank() -> {
+                "Dominio invalido"
+            }
+            else ->{
+              null
+            }
+        }
+        _estado.update { it.copy(correo = valor, errores = it.errores.copy(correo = errorCorreo)) }
     }
     fun onAsuntoChange(valor: String) {
-        _estado.update { it.copy(asunto = valor, errores = it.errores.copy(asunto = null)) }
+        _estado.update { it.copy(asunto = valor, errores = it.errores.copy(asunto = null), asuntoMenu = false) }
+    }
+    fun onAuntoMenuChange(abierto: Boolean) {
+        _estado.update { it.copy(asuntoMenu = abierto) }
     }
 
     fun onMensajeChange(mensaje: String) {
-        // Aplica la validación del límite de caracteres aquí
         if (mensaje.length <= 500) {
             _estado.update { it.copy(mensaje = mensaje) }
         }
@@ -41,12 +61,7 @@ class ContactoViewModel : ViewModel() {
     fun validaFormulario(): Boolean{
         val estadoActual = _estado.value
         val errorNombreFinal = if (estadoActual.nombre.isBlank()) "El nombre es obligatorio." else _estado.value.errores.nombre
-        val dominiosPermitidos = listOf("gmail.com", "hotmail.com", "outlook.com", "duocuc.cl", "profesor.duoc.cl")
-        val errorCorreo = when {
-            estadoActual.correo.isBlank() -> "Campo obligatorio"
-            !dominiosPermitidos.any { estadoActual.correo.endsWith(it, ignoreCase = true) } -> "Dominio no permitido"
-            else -> null
-        }
+        val errorCorreo = if (estadoActual.correo.isBlank()) "El correo es obligatorio." else _estado.value.errores.correo
         val errorAsunto = when{
             estadoActual.asunto.isBlank() -> "Campo obligatorio"
             else -> null
