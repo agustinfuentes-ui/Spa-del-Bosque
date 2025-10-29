@@ -91,12 +91,16 @@ fun HomeScreen(
                     Button(onClick = {
                         navController.navigate(Route.Servicios.path)
                     }) {
-                        Text("Servicios")
+                        Text("Servicios",
+                            color = MaterialTheme.colorScheme.onPrimary)
+
+
                     }
                     Button(onClick = {
                         navController.navigate(Route.Nosotros.path)
                     }) {
-                        Text("Nosotros")
+                        Text("Nosotros",
+                            color = MaterialTheme.colorScheme.onPrimary)
                     }
                 }
             }

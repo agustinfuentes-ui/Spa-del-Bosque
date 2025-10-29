@@ -73,7 +73,8 @@ fun ArticuloCard (article : BlogArticulo){
                     onClick = { /* TODO: Acción futura */ },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Leer más")
+                    Text("Leer más",
+                        color = MaterialTheme.colorScheme.onPrimary)
                 }
             }
         }

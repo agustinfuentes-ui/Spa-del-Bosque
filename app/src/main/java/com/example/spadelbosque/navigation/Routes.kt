@@ -1,6 +1,10 @@
 package com.example.spadelbosque.navigation
 
 sealed class Route(val path: String){
+
+    data object Splash : Route("splash")
+    data object Login : Route("login")
+    data object Registro: Route("registro")
     data object Home : Route("home")
     data object Servicios : Route("servicios")
     data object Blogs : Route("blogs")
@@ -8,8 +12,7 @@ sealed class Route(val path: String){
     data object Contacto: Route("contacto")
     data object Carrito: Route("carrito")
     data object Perfil : Route("perfil")
-    data object Login : Route("login")
-    data object Registro: Route("registro")
+
     data object ServicioDetalle : Route("servicioDetalle/id"){
         fun whithId(id: String) = "servicioDetalle/$id"
     }

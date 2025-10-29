@@ -43,6 +43,7 @@ android {
 dependencies {
     // Compose BOM (solo una vez)
     implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.core.splashscreen)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -60,6 +61,7 @@ dependencies {
 
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.runtime)
     ksp(libs.androidx.room.compiler)
 
     implementation(libs.kotlinx.coroutines.android)

@@ -64,8 +64,13 @@ fun ContactoScreen(navController: NavController, viewModel: ContactoViewModel) {
                 onValueChange = viewModel::onAsuntoChange,
                 label = { Text("Asunto",
                     color = MaterialTheme.colorScheme.primary) },
+                isError = estado.errores.asunto != null,
+                supportingText = {
+                    estado.errores.asunto?.let { Text(it, color = MaterialTheme.colorScheme.error) }
+                },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth()
+
             )
 
             OutlinedTextField(
@@ -76,12 +81,14 @@ fun ContactoScreen(navController: NavController, viewModel: ContactoViewModel) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(150.dp),
+                isError = estado.errores.mensaje != null,
                 supportingText = {
-                    Text(
+                    estado.errores.mensaje?.let { Text(
                         text = "${estado.mensaje.length} / 500",
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.End
-                    )
+                    )}
+
                 }
             )
 
@@ -95,7 +102,8 @@ fun ContactoScreen(navController: NavController, viewModel: ContactoViewModel) {
                     }
                 }
             }, modifier = Modifier.fillMaxWidth()) {
-                Text("Enviar Mensaje")
+                Text("Enviar Mensaje",
+                    color = MaterialTheme.colorScheme.onPrimary)
             }
         }
     }

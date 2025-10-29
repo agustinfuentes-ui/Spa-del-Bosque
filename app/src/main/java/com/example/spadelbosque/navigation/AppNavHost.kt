@@ -28,20 +28,34 @@ import com.example.spadelbosque.viewmodel.factory.PerfilVmFactory
 import com.example.spadelbosque.di.AppGraph
 import com.example.spadelbosque.viewmodel.factory.CarritoVmFactory
 import com.example.spadelbosque.viewmodel.factory.AuthVmFactory
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import com.example.spadelbosque.ui.screens.SplashScreen
 
 
 @Composable
 fun AppNavHost(windowSizeClass: WindowSizeClass) {
     val navController = rememberNavController()
+
     val authViewModel: AuthViewModel =
         viewModel(factory = AuthVmFactory(AppGraph.authRepo))
 
     NavHost(
         navController = navController,
-        startDestination = Route.Login.path
+        startDestination = Route.Splash.path
     ) {
+        //---Animación de Inicio----//
+        composable(Route.Splash.path) {
+            SplashScreen(
+                authVm = authViewModel,
+                onFinished = { isLoggedIn ->
+                    val target = if (isLoggedIn) Route.Home.path else Route.Login.path
+                    navController.navigate(target) {
+                        popUpTo(Route.Splash.path) { inclusive = true } // evita volver a Splash
+                        launchSingleTop = true
+                    }
+                }
+            )
+        }
         // --- Flujo de Autenticación ---
         composable(Route.Login.path) {
             LoginScreen(navController = navController, viewModel = authViewModel)
