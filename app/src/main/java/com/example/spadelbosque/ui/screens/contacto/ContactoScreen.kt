@@ -20,6 +20,7 @@ import kotlinx.coroutines.launch
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 
+@ExperimentalMaterial3Api
 @Composable
 fun ContactoScreen(navController: NavController, viewModel: ContactoViewModel) {
     val estado by viewModel.estado.collectAsState()
@@ -45,7 +46,8 @@ fun ContactoScreen(navController: NavController, viewModel: ContactoViewModel) {
                 supportingText = {
                     estado.errores.nombre?.let { Text(it, color = MaterialTheme.colorScheme.error) }
                 },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+
             )
             OutlinedTextField(
                 value = estado.correo,
@@ -59,14 +61,50 @@ fun ContactoScreen(navController: NavController, viewModel: ContactoViewModel) {
                 modifier = Modifier.fillMaxWidth()
             )
             // --- CAMPO PARA EL ASUNTO ---
-            OutlinedTextField(
-                value = estado.asunto,
-                onValueChange = viewModel::onAsuntoChange,
-                label = { Text("Asunto",
-                    color = MaterialTheme.colorScheme.primary) },
-                singleLine = true,
+            ExposedDropdownMenuBox(
+                expanded = estado.asuntoMenu,
+                onExpandedChange = viewModel::onAuntoMenuChange,
                 modifier = Modifier.fillMaxWidth()
-            )
+            ) {
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .menuAnchor(),
+                    readOnly = true,
+                    value = estado.asunto,
+                    onValueChange = {},
+                    label = {
+                        Text(
+                            "Asunto",
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    },
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = estado.asuntoMenu) },
+                    isError = estado.errores.asunto != null,
+                    supportingText = {
+                        estado.errores.asunto?.let {
+                            Text(
+                                it,
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+                    }
+                )
+                ExposedDropdownMenu(
+                    expanded = estado.asuntoMenu,
+                    onDismissRequest = { viewModel.onAuntoMenuChange(false) }
+                ) {
+                    viewModel.asuntosDisponibles.forEach { asuntoSeleccionado ->
+                        DropdownMenuItem(
+                            text = { Text(asuntoSeleccionado) },
+                            onClick = {
+                                viewModel.onAsuntoChange(asuntoSeleccionado)
+                            }
+                        )
+                    }
+                }
+            }
+
 
             OutlinedTextField(
                 value = estado.mensaje,
