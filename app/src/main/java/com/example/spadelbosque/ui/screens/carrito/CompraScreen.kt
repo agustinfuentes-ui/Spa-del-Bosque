@@ -117,7 +117,8 @@ fun CompraScreen(
                     onClick = onFinalizar,
                     enabled = state.items.isNotEmpty(),
                     modifier = Modifier.weight(1f)
-                ) { Text("Finalizar compra") }
+                ) { Text("Finalizar compra",color = MaterialTheme.colorScheme.onPrimary) }
+
             }
         }
     }

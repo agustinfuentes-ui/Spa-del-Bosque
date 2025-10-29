@@ -41,7 +41,7 @@ fun CarritoScreen(
                     Text("Visita Servicios para agregar terapias.")
                 }
             }
-            Button(onClick = onSeguirAgregando) { Text("Ir a Servicios") }
+            Button(onClick = onSeguirAgregando) { Text("Ir a Servicios", color = MaterialTheme.colorScheme.onPrimary) }
         }
         return
     }
@@ -90,7 +90,7 @@ fun CarritoScreen(
                     onClick = onComprar,
                     enabled = state.items.isNotEmpty()
                 ) {
-                    Text( "Comprar")
+                    Text( "Comprar", color = MaterialTheme.colorScheme.onPrimary)
                 }
             }
         }

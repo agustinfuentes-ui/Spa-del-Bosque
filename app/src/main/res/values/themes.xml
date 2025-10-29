@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.SPADelBosque" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.SPADelBosque" parent="android:Theme.Material.Light.NoActionBar" >
+        <item name="android:windowBackground">#E6F2EF</item>
+
+    </style>
+
+    <style name="Theme.SpaDelBosque.Splash" parent="Theme.SplashScreen">
+        <!-- Fondo suave tipo spa -->
+        <item name="windowSplashScreenBackground">#E6F2EF</item>
+        <item name="postSplashScreenTheme">@style/Theme.SPADelBosque</item>
+    </style>
 </resources>
