@@ -116,7 +116,7 @@ fun ContactoScreen(navController: NavController, viewModel: ContactoViewModel) {
                     .height(150.dp),
                 supportingText = {
                     Text(
-                        text = "${estado.mensaje.length} / 500",
+                        text = "${500-estado.mensaje.length}",
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.End
                     )
