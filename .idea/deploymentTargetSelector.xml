@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2025-10-29T03:01:19.041714600Z">
+        <DropdownSelection timestamp="2025-10-29T20:25:32.434244300Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="PhysicalDevice" identifier="serial=7DOFA67DCYRGAIWW" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\palva\.android\avd\Pixel_7a.avd" />
             </handle>
           </Target>
         </DropdownSelection>
@@ -25,9 +25,6 @@
             </Target>
           </targets>
         </DialogSelection>
-      </SelectionState>
-      <SelectionState runConfigName="LoginScreenPreview">
-        <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
   </component>
