@@ -1,5 +1,6 @@
 package com.example.spadelbosque.navigation
 
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -31,7 +32,7 @@ import com.example.spadelbosque.viewmodel.factory.AuthVmFactory
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import com.example.spadelbosque.ui.screens.SplashScreen
 
-
+@ExperimentalMaterial3Api
 @Composable
 fun AppNavHost(windowSizeClass: WindowSizeClass) {
     val navController = rememberNavController()
