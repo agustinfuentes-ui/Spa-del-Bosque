@@ -22,7 +22,7 @@ import com.example.spadelbosque.viewmodel.AuthViewModel
 import com.example.spadelbosque.viewmodel.factory.AuthVmFactory
 
 class MainActivity : ComponentActivity() {
-    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class, ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
