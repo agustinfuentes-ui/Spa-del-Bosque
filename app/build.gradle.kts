@@ -52,6 +52,10 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
 
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.logging.interceptor)
+
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.material3.window.size)
     implementation(libs.androidx.lifecycle.viewmodel.compose)

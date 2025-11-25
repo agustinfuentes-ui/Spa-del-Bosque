@@ -31,6 +31,8 @@ import com.example.spadelbosque.viewmodel.factory.CarritoVmFactory
 import com.example.spadelbosque.viewmodel.factory.AuthVmFactory
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import com.example.spadelbosque.ui.screens.SplashScreen
+import com.example.spadelbosque.ui.screens.pago.PagoWebViewScreen
+import java.net.URLDecoder
 
 @ExperimentalMaterial3Api
 @Composable
@@ -167,6 +169,37 @@ fun AppNavHost(windowSizeClass: WindowSizeClass) {
                         }
                         navController.getBackStackEntry(Route.Home.path)
                             .savedStateHandle["clear_cart"] = true
+                    },
+                    onNavigarAPago = { token, url ->
+                        // Navegar a pantalla de pago con Transbank
+                        navController.navigate(Route.PagoTransbank.withData(token, url))
+                    }
+                )
+            }
+        }
+        composable(
+            route = "pago_transbank?token={token}&url={url}",
+            arguments = listOf(
+                navArgument("token") { type = NavType.StringType },
+                navArgument("url") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+            val token = backStackEntry.arguments?.getString("token") ?: ""
+            val encodedUrl = backStackEntry.arguments?.getString("url") ?: ""
+            val url = URLDecoder.decode(encodedUrl, "UTF-8")
+
+            MainShell(navController, windowSizeClass) {
+                PagoWebViewScreen(
+                    token = token,
+                    url = url,
+                    onPagoCompletado = { tokenRespuesta ->
+                        // Aquí puedes confirmar el pago con el token
+                        navController.navigate(Route.Home.path) {
+                            popUpTo(Route.Home.path) { inclusive = true }
+                        }
+                    },
+                    onCancelar = {
+                        navController.popBackStack()
                     }
                 )
             }

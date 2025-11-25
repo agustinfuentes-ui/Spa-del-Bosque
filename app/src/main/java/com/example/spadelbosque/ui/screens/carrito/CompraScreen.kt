@@ -12,18 +12,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.spadelbosque.ui.util.CLP
 import com.example.spadelbosque.viewmodel.CarritoViewModel
+import com.example.spadelbosque.viewmodel.PagoTransbankViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import com.example.spadelbosque.model.transbank.EstadoTransbank
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CompraScreen(
     carritoVm: CarritoViewModel,
     onCancelar: () -> Unit,
-    onFinalizar: () -> Unit
+    onFinalizar: () -> Unit,
+    onNavigarAPago: (String, String) -> Unit = { _, _ -> }
 ) {
     val state by carritoVm.ui.collectAsState()
 
@@ -118,6 +122,64 @@ fun CompraScreen(
                     enabled = state.items.isNotEmpty(),
                     modifier = Modifier.weight(1f)
                 ) { Text("Finalizar compra",color = MaterialTheme.colorScheme.onPrimary) }
+
+                val pagoVm: PagoTransbankViewModel = viewModel()
+                val estadoPago by pagoVm.estadoPago.collectAsState()
+                val transaccionData by pagoVm.transaccionData.collectAsState()
+                val errorPago by pagoVm.error.collectAsState()
+
+                LaunchedEffect(estadoPago) {
+                    android.util.Log.d("CompraScreen", "Estado pago: $estadoPago")
+                }
+
+                LaunchedEffect(transaccionData) {
+                    transaccionData?.let { data ->
+                        android.util.Log.d("CompraScreen", "Token recibido: ${data.token}")
+                        android.util.Log.d("CompraScreen", "URL recibida: ${data.url}")
+                        onNavigarAPago(data.token, data.url)
+                    }
+                }
+
+                errorPago?.let { error ->
+                    Text(
+                        text = "Error: $error",
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
+
+                if (estadoPago == EstadoTransbank.INICIANDO || estadoPago == EstadoTransbank.EN_PROCESO) {
+                    CircularProgressIndicator()
+                }
+
+                Row(
+                    Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    OutlinedButton(
+                        onClick = onCancelar,
+                        modifier = Modifier.weight(1f)
+                    ) { Text("Cancelar") }
+
+                    Button(
+                        onClick = onFinalizar,
+                        enabled = state.items.isNotEmpty(),
+                        modifier = Modifier.weight(1f)
+                    ) { Text("Finalizar compra", color = MaterialTheme.colorScheme.onPrimary) }
+
+                    Button(
+                        onClick = {
+                            android.util.Log.d("CompraScreen", "Botón Transbank presionado")
+                            android.util.Log.d("CompraScreen", "Monto: ${state.total}")
+                            pagoVm.iniciarPago(state.total)
+                        },
+                        enabled = state.items.isNotEmpty(),
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text("Pagar con Transbank", color = MaterialTheme.colorScheme.onPrimary)
+                    }
+                }
+
 
             }
         }
