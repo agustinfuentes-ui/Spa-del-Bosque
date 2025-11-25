@@ -2,7 +2,9 @@
 # Configuración de versiones estable y probada
 agp = "8.6.0"
 converterGson = "2.9.0"
+coreTesting = "2.2.0"
 kotlin = "2.0.21"
+kotlinxCoroutinesTest = "1.10.2"
 ksp = "2.0.21-1.0.25"
 
 # Otras dependencias (se mantienen actualizadas)
@@ -14,6 +16,7 @@ lifecycleRuntimeKtx = "2.9.4"
 activityCompose = "1.9.2"
 lifecycle = "2.9.4"
 loggingInterceptor = "4.12.0"
+mockk = "1.14.6"
 navigation = "2.9.5"
 material3 = "1.4.0"
 material3WindowSize = "1.4.0"
@@ -32,6 +35,7 @@ runtimeVersion = "1.9.4"
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashScreen" }
+androidx-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "coreTesting" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
@@ -60,7 +64,9 @@ kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutine
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 androidx-material3-window-size = { group = "androidx.compose.material3", name = "material3-window-size-class", version.ref = "material3WindowSize" }
 androidx-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "runtimeVersion" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "loggingInterceptor" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 
 [plugins]
