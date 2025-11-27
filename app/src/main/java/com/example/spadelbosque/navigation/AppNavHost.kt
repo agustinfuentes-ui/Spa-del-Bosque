@@ -1,6 +1,7 @@
 package com.example.spadelbosque.navigation
 
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -33,6 +34,7 @@ import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import com.example.spadelbosque.ui.screens.SplashScreen
 import com.example.spadelbosque.ui.screens.pago.PagoWebViewScreen
 import java.net.URLDecoder
+import com.example.spadelbosque.ui.screens.perfil.EditarPerfilScreen
 
 @ExperimentalMaterial3Api
 @Composable
@@ -116,11 +118,25 @@ fun AppNavHost(windowSizeClass: WindowSizeClass) {
                         }
                     },
                     onEditar = {
-                        // Por ahora no hace nada
+                         navController.navigate(Route.EditarPerfil.path)
                     }
                 )
             }
         }
+
+        composable(Route.EditarPerfil.path) {
+            val perfilVm: PerfilViewModel = viewModel(
+                factory = PerfilVmFactory(AppGraph.app, AppGraph.authRepo)
+            )
+
+            MainShell(navController, windowSizeClass) {
+                EditarPerfilScreen(
+                    navController = navController,
+                    viewModel = perfilVm
+                )
+            }
+        }
+
 
         composable(
             route = "servicio_detalle/{sku}",

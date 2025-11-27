@@ -66,7 +66,7 @@ fun HomeScreen(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(18.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -78,7 +78,9 @@ fun HomeScreen(
                     style = MaterialTheme.typography.bodyMedium
                 )
             }
+
             item {
+                Spacer(modifier = Modifier.height(25.dp))
                 Carrusel()
             }
 

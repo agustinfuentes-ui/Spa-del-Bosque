@@ -11,7 +11,7 @@ import com.example.spadelbosque.model.Usuario
 @Entity(tableName = "usuarios")
 data class UsuarioEntity(
     @PrimaryKey
-    val id: String,
+    val id: Long?,
     val nombres: String,
     val apellidos: String,
     val correo: String,
@@ -31,7 +31,7 @@ fun UsuarioEntity.toUsuario(): Usuario {
         id = id,
         nombres = nombres,
         apellidos = apellidos,
-        correo = correo,
+        email = correo,
         password = password,
         telefono = telefono,
         fotoUri = fotoUri
@@ -43,10 +43,10 @@ fun UsuarioEntity.toUsuario(): Usuario {
  */
 fun Usuario.toEntity(): UsuarioEntity {
     return UsuarioEntity(
-        id = id.ifEmpty { java.util.UUID.randomUUID().toString() },
+        id = id,
         nombres = nombres,
         apellidos = apellidos,
-        correo = correo,
+        correo = email,
         password = password,
         telefono = telefono,
         fotoUri = fotoUri

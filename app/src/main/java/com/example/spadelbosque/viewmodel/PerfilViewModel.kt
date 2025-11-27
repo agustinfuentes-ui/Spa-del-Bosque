@@ -3,10 +3,10 @@ package com.example.spadelbosque.viewmodel
 import android.app.Application
 import android.graphics.Bitmap
 import android.net.Uri
+import android.util.Log
 import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.spadelbosque.model.Usuario
 import com.example.spadelbosque.repository.AuthRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,7 +17,6 @@ import java.io.File
 import java.io.FileOutputStream
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
-import java.util.Date
 import java.util.Locale
 
 // --- Modelo para el historial de compras ---
@@ -38,12 +37,19 @@ data class CompraItem(
 // --- UI State del perfil ---
 data class PerfilUi(
     val photoUri: String? = null,
+    val id: Long = 0,
     val nombres: String = "",
     val apellidos: String = "",
     val telefono: String = "",
-    val correo: String = "",
+    val email: String = "",
+    val region: String = "",
+    val comuna: String = "",
+    val fechaNacimiento: String = "",
     val cargando: Boolean = false,
-    val compras: List<CompraItem> = emptyList()
+    val compras: List<CompraItem> = emptyList(),
+    val listaDeComunas: List<String> = listOf("Providencia", "Las Condes", "Santiago", "Ñuñoa", "Viña del Mar", "Valparaiso"),
+    val listaDeRegiones: List<String> = listOf("Región Metropolitana", "Región de Valparaíso", "Región de Antofagasta",
+        "Región de Atacama", "Región de Coquimbo","Región de O'Higgins", "Región del Maule",  "Región del Biobío")
 ) {
     val nombreCompleto: String
         get() = listOf(nombres, apellidos).joinToString(" ").trim()
@@ -64,45 +70,61 @@ class PerfilViewModel(
     private val _ui = MutableStateFlow(PerfilUi())
     val ui: StateFlow<PerfilUi> = _ui.asStateFlow()
 
+    init {
+        cargar()
+    }
+    fun onComunaSelected(nuevaComuna: String) {
+        _ui.update { it.copy(comuna = nuevaComuna) }
+    }
+    fun onRegionSelected(nuevaRegion: String) {
+        _ui.update { it.copy(region= nuevaRegion) }
+    }
+
+    //-------------------------CARGAR---------------------
     fun cargar() = viewModelScope.launch {
         _ui.update { it.copy(cargando = true) }
 
-        val u = auth.obtenerSesionActiva()
-        val photo = prefs.getString("photo_uri", null)
+        val sesion = auth.obtenerSesionActiva()
+        if (sesion?.id == null) {
+            _ui.update { it.copy(cargando = false) }
+            return@launch
+        }
 
-        // Fechas amigables usando API 24 (SimpleDateFormat + Date)
-        val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale("es", "CL"))
-        val ahora = sdf.format(Date())
-        val ayer = sdf.format(Date(System.currentTimeMillis() - 24L * 60 * 60 * 1000))
+        val usuarioCompleto = auth.obtenerUsuarioPorId(sesion.id)
 
-        // Mock de compras (puedes poblar con datos reales más adelante)
-        val compras = listOf(
-            CompraItem(
-                sku = "RELAX30",
-                titulo = "Masaje de Relajación 30 min",
-                cantidad = 1,
-                precio = 19990,
-                fechaStr = ahora
-            ),
-            CompraItem(
-                sku = "RELAX40",
-                titulo = "Masaje de Relajación 40 min",
-                cantidad = 1,
-                precio = 24990,
-                fechaStr = ayer
+        // --- 👇 LÓGICA DE CONVERSIÓN DE FECHA PARA LA UI ---
+        val fechaUI: String = usuarioCompleto?.fechaNacimiento?.let { fechaBackend ->
+            try {
+                // Asume que la fecha del backend viene como 'YYYY-MM-DD' (o con hora)
+                val formatoBackend = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                val fechaDate = formatoBackend.parse(fechaBackend.substring(0, 10)) // Tomamos solo la parte de la fecha
+                val formatoUI = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                formatoUI.format(fechaDate!!)
+            } catch (e: Exception) {
+                Log.e("PerfilViewModel", "Error al convertir fecha: ", e)
+                // Si el formato ya es dd/MM/yyyy o es inválido, lo dejamos como está
+                if (fechaBackend.matches(Regex("\\d{2}/\\d{2}/\\d{4}"))) fechaBackend else ""
+            }
+        } ?: ""
+
+        val comprasMock = ui.value.compras
+
+        _ui.update {
+            it.copy(
+                id = usuarioCompleto?.id ?: 0,
+                nombres = usuarioCompleto?.nombres ?: "",
+                apellidos = usuarioCompleto?.apellidos ?: "",
+                telefono = usuarioCompleto?.telefono ?: "",
+                email = usuarioCompleto?.email ?: "",
+                region = usuarioCompleto?.region ?: "",
+                comuna = usuarioCompleto?.comuna ?: "",
+                fechaNacimiento = fechaUI,
+                compras = comprasMock,
+                cargando = false
             )
-        )
-
-        _ui.value = PerfilUi(
-            photoUri = photo,
-            nombres = u?.nombres.orEmpty(),
-            apellidos = u?.apellidos.orEmpty(),
-            telefono = u?.telefono.orEmpty(),
-            correo = u?.correo.orEmpty(),
-            compras = compras,
-            cargando = false
-        )
+        }
     }
+
 
     fun guardarFoto(uri: String?) {
         prefs.edit().putString("photo_uri", uri).apply()
@@ -129,22 +151,41 @@ class PerfilViewModel(
     fun onNombres(v: String) = _ui.update { it.copy(nombres = v) }
     fun onApellidos(v: String) = _ui.update { it.copy(apellidos = v) }
     fun onTelefono(v: String) = _ui.update { it.copy(telefono = v) }
+    fun onEmail(v: String) = _ui.update { it.copy(email = v) }
+    fun onFechaNacimiento(v: String) = _ui.update { it.copy(fechaNacimiento = v) }
 
-    fun guardarCambios() = viewModelScope.launch {
-        val current = auth.obtenerSesionActiva()
-        if (current != null) {
-            val actualizado: Usuario = current.copy(
-                nombres = _ui.value.nombres,
-                apellidos = _ui.value.apellidos,
-                telefono = _ui.value.telefono
-            )
-            auth.guardarSesion(actualizado) // persiste sesión rápida
+
+
+
+    fun guardarCambios(
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) = viewModelScope.launch {
+
+        val sesion = auth.obtenerSesionActiva()
+        if (sesion?.id == null) {
+            onError("Sesión no válida")
+            return@launch
         }
-        // persistencia adicional ligera
-        prefs.edit {
-            putString("perfil_nombres", _ui.value.nombres)
-            putString("perfil_apellidos", _ui.value.apellidos)
-            putString("perfil_tel", _ui.value.telefono)
+
+        val actualizado = sesion.copy(
+            nombres = _ui.value.nombres,
+            apellidos = _ui.value.apellidos,
+            telefono = _ui.value.telefono,
+            region = _ui.value.region,
+            comuna = _ui.value.comuna,
+            fechaNacimiento = _ui.value.fechaNacimiento
+
+        )
+
+        val resultado = auth.actualizarUsuario(sesion.id, actualizado)
+
+        if (resultado != null) {
+            auth.guardarSesion(resultado)
+            onSuccess()
+        } else {
+            onError("Error al actualizar perfil")
         }
     }
+
 }
