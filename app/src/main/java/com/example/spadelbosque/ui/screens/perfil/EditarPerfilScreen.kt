@@ -134,7 +134,7 @@ fun EditarPerfilScreen(
                     },
                     colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
                     modifier = Modifier
-                        .menuAnchor() // Ancla el menú al TextField
+                        .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable) // Ancla el menú al TextField
                         .fillMaxWidth()
                 )
 
@@ -174,7 +174,7 @@ fun EditarPerfilScreen(
                     },
                     colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
                     modifier = Modifier
-                        .menuAnchor() // Ancla el menú al TextField
+                        .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable) // Ancla el menú al TextField
                         .fillMaxWidth()
                 )
 

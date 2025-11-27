@@ -98,7 +98,7 @@ fun CompraScreen(
                                         style = MaterialTheme.typography.bodyMedium
                                     )
                                 }
-                                Divider()
+                                HorizontalDivider()
                             }
                         }
                     }

@@ -126,7 +126,7 @@ fun PerfilScreen(
                     supportingContent = { Text("SKU ${it.sku} · ${it.fechaStr}") },
                     trailingContent   = { Text(it.subtotalCLP()) }
                 )
-                Divider()
+                HorizontalDivider()
             }
 
             if (ui.compras.isNotEmpty()) {

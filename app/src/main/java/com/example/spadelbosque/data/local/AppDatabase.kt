@@ -27,7 +27,7 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "spa_db"
                 )
-                    .fallbackToDestructiveMigration()   // <--- evita crash por cambios de schema
+                    .fallbackToDestructiveMigration(dropAllTables = true)   // <--- evita crash por cambios de schema
                     .build()
                     .also { INSTANCE = it }
             }

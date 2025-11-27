@@ -63,7 +63,7 @@ fun ContactoScreen(navController: NavController, viewModel: ContactoViewModel) {
                 OutlinedTextField(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .menuAnchor(),
+                        .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable),
                     readOnly = true,
                     value = estado.asunto,
                     onValueChange = {},
