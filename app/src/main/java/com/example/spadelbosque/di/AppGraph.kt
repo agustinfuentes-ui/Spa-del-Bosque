@@ -28,6 +28,6 @@ object AppGraph {
         // Corrección: Instanciar la implementación, no la interfaz
         this.cartRepo = CartRepositoryImpl()
         // Inicialización de la implementación de AuthRepository
-        this.authRepo = AuthRepositoryImpl(context, db)
+        this.authRepo = AuthRepositoryImpl(context)
     }
 }

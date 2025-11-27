@@ -20,6 +20,8 @@ import com.example.spadelbosque.viewmodel.PerfilViewModel
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.activity.result.PickVisualMediaRequest
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,9 +50,11 @@ fun PerfilScreen(
     var showEdit by remember { mutableStateOf(false) }
 
     Scaffold(topBar = { TopAppBar(title = { Text("Mi Perfil") }) }) { p ->
+        val scroll = rememberScrollState()
         Column(Modifier
             .padding(p)
-            .padding(16.dp)) {
+            .verticalScroll(scroll)
+            .padding(16.dp))  {
             if (ui.cargando) {
                 LinearProgressIndicator()
                 return@Column
@@ -100,8 +104,12 @@ fun PerfilScreen(
 
             Text(ui.nombreCompleto, style = MaterialTheme.typography.headlineSmall)
             Spacer(Modifier.height(4.dp))
-            Text(ui.correo)
+            Text(text = "Fecha de Nacimiento: ${ui.fechaNacimiento.ifBlank { "-" }}")
+            Text(ui.email)
             Text("Teléfono: ${ui.telefono}")
+            Text(text = "Región: ${ui.region.ifBlank { "-" }}")
+            Text(text = "Comuna: ${ui.comuna.ifBlank { "-" }}")
+
 
             Spacer(Modifier.height(16.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {

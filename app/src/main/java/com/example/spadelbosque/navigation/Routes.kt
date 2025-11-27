@@ -12,6 +12,7 @@ sealed class Route(val path: String){
     data object Contacto: Route("contacto")
     data object Carrito: Route("carrito")
     data object Perfil : Route("perfil")
+    data object EditarPerfil : Route("editarPerfil")
 
     data object ServicioDetalle : Route("servicioDetalle/id"){
         fun whithId(id: String) = "servicioDetalle/$id"

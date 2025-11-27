@@ -1,21 +1,24 @@
 package com.example.spadelbosque.ui.components
 
 import androidx.annotation.DrawableRes
-import androidx.compose.material3.carousel.HorizontalUncontainedCarousel
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.carousel.HorizontalMultiBrowseCarousel
 import androidx.compose.material3.carousel.rememberCarouselState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.example.spadelbosque.R
 import androidx.compose.ui.Modifier
-import androidx.compose.foundation.layout.*
-import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.Image
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.*
-import androidx.compose.material3.carousel.HorizontalMultiBrowseCarousel
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import com.example.spadelbosque.R
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,28 +40,29 @@ fun Carrusel() {
         )
     }
 
-    val screenWith = LocalConfiguration.current.screenWidthDp.dp
-    val itemWith = screenWith / 1.1f
+    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+    val itemWidth = screenWidth / 1.2f
 
     HorizontalMultiBrowseCarousel(
-        state = rememberCarouselState { carouselItems.count() },
-
+        state = rememberCarouselState(itemCount = { carouselItems.size }),
         modifier = Modifier
             .fillMaxWidth()
-            .wrapContentHeight()
-            .padding(top = 16.dp, bottom = 16.dp),
-        preferredItemWidth   = itemWith,
+            .height(220.dp),
+        preferredItemWidth = itemWidth,
         itemSpacing = 8.dp,
-        contentPadding = PaddingValues(horizontal = 16.dp)
-    ) { i ->
-        val item = carouselItems[i]
-        Image(
+        contentPadding = PaddingValues(horizontal = (screenWidth - itemWidth) / 2)
+    ) {index ->
+        val item = carouselItems[index]
+        Card(
             modifier = Modifier
                 .height(205.dp)
-                .maskClip(MaterialTheme.shapes.extraLarge),
-            painter = painterResource(id = item.imageResId),
-            contentDescription = item.contentDescription,
-            contentScale = ContentScale.Crop
-        )
+        ){
+            Image(
+                painter = painterResource(id = item.imageResId),
+                contentDescription = item.contentDescription,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxWidth().clip(MaterialTheme.shapes.large)
+            )
+        }
     }
 }

@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-
+import android.util.Log
 
 class AuthViewModel(private val repo: AuthRepository
 ) : ViewModel(){
@@ -80,24 +80,34 @@ class AuthViewModel(private val repo: AuthRepository
         onSuccess: () -> Unit,
         onError: (String) -> Unit
     ) {
-        if (!validarLogin()) return
+        Log.d("AuthVM", "👉 Botón login presionado")
+
+        if (!validarLogin()) {
+            Log.d("AuthVM", "❌ validarLogin() = false (errores en el formulario)")
+            return
+        }
 
         _loginLoading.value = true
 
         viewModelScope.launch {
             try {
+                Log.d("AuthVM", "🌐 Llamando repo.validarCredenciales()")
                 val estadoActual = _loginState.value
+
                 val usuario = repo.validarCredenciales(
                     estadoActual.correo,
                     estadoActual.password
                 )
 
+                Log.d("AuthVM", "✅ Respuesta del repo: $usuario")
+
                 if (usuario != null) {
                     repo.guardarSesion(usuario)
-                    _sesionState.value = usuario // Actualizar el estado de sesión
+                    _sesionState.value = usuario
                     _loginLoading.value = false
                     onSuccess()
                 } else {
+                    Log.d("AuthVM", "❌ Credenciales incorrectas (usuario null)")
                     _loginState.update {
                         it.copy(
                             errores = it.errores.copy(
@@ -109,6 +119,7 @@ class AuthViewModel(private val repo: AuthRepository
                     onError("Credenciales incorrectas")
                 }
             } catch (e: Exception) {
+                Log.e("AuthVM", "🔥 Error inesperado en login", e)
                 _loginLoading.value = false
                 onError("Error al iniciar sesión: ${e.message}")
             }
@@ -198,9 +209,10 @@ class AuthViewModel(private val repo: AuthRepository
                 }
 
                 val nuevoUsuario = Usuario(
+                    id = null,
                     nombres = estadoActual.nombres,
                     apellidos = estadoActual.apellidos,
-                    correo = estadoActual.correo,
+                    email = estadoActual.correo,
                     password = estadoActual.password,
                     telefono = estadoActual.telefono
                 )
@@ -216,13 +228,14 @@ class AuthViewModel(private val repo: AuthRepository
                     onError("Error al registrar usuario")
                 }
             } catch (e: Exception) {
+                Log.d("AuthVM", "👉 Error inesperado en registro: ${e.message}")
                 _registroLoading.value = false
-                onError("Error: ${e.message}")
+                onError("Error al registrar usuario: ${e.message}")
             }
         }
     }
 
-    
+
     // Función corregida para aceptar un callback
     fun cerrarSesion(onSesionCerrada: () -> Unit) {
         viewModelScope.launch {
@@ -233,3 +246,7 @@ class AuthViewModel(private val repo: AuthRepository
     }
 
 }
+
+
+
+
