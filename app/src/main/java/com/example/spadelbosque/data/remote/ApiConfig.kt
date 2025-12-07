@@ -1,11 +1,11 @@
 package com.example.spadelbosque.data.remote
 
 object ApiConfig {
-    // APKs
-    const val BASE_URL = "http://10.15.64.248:8080/"
+    // APKs se coloca la ip del computador, deben estar en la misma red wifi
+    //const val BASE_URL = "http://10.217.61.31:8080/"
 
     // Emulador
-    //const val BASE_URL = "http://10.0.2.2:8080/"
+    const val BASE_URL = "http://10.0.2.2:8080/"
 
 
 
